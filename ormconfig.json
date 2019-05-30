@@ -1,0 +1,17 @@
+{
+  "type": "mssql",
+  "host": "localhost",
+  "username": "sa",
+  "password": "reallyStrongPwd123",
+  "database": "catalart",
+  "synchronize": true,
+  "logging": false,
+  "entities": ["src/dal/entity/**/*.ts"],
+  "migrations": ["src/dal/migration/**/*.ts"],
+  "subscribers": ["src/dal/subscriber/**/*.ts"],
+  "cli": {
+    "entitiesDir": "src/dal/entity",
+    "migrationsDir": "src/dal/migration",
+    "subscribersDir": "src/dal/subscriber"
+  }
+}
