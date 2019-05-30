@@ -1,5 +1,16 @@
-import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
 import { ArtworkService } from 'src/business/services/artwork.service';
+
 import { Artwork } from 'src/dal/entity/artwork.entity';
 import { CreateArtworkDto } from './models/create-artwork.dto';
 import { UpdateArtworkDto } from './models/update-artwork.dto';
@@ -19,11 +30,13 @@ export class ArtworkController {
   }
 
   @Post()
+  @UseGuards(AuthGuard())
   async addArtwork(@Body() createArtDto: CreateArtworkDto) {
     return this.artworkService.addArtwork(createArtDto);
   }
 
   @Put()
+  @UseGuards(AuthGuard())
   async updateArtwork(@Body() updateArtDto: UpdateArtworkDto) {
     return this.artworkService.addArtwork(updateArtDto);
   }

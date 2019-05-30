@@ -10,4 +10,7 @@ export class User {
 
   @Column()
   profession: string;
+
+  @Column()
+  token: string;
 }
