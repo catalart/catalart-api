@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Artwork } from 'src/dal/entity/artwork.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeepPartial } from 'typeorm';
+import { Observable, from } from 'rxjs';
 
 @Injectable()
 export class ArtworkService {
@@ -10,12 +11,12 @@ export class ArtworkService {
     private readonly artworkRepository: Repository<Artwork>,
   ) {}
 
-  getArtworkById(id: number): Promise<Artwork> {
-    return this.artworkRepository.findOne(id);
+  getArtworkById(id: number): Observable<Artwork> {
+    return from(this.artworkRepository.findOne(id));
   }
 
-  getAllArtwork(): Promise<Artwork[]> {
-    return this.artworkRepository.find();
+  getAllArtwork(): Observable<Artwork[]> {
+    return from(this.artworkRepository.find());
   }
 
   addArtwork(artwork: DeepPartial<Artwork>) {

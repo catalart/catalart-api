@@ -7,7 +7,7 @@ import { UpdateArtCollectionDto } from './models/art-collection/update-art-colle
 import { CreateArtCollectionDto } from './models/art-collection/create-art-collection.dto';
 import { GetArtCollectionDto } from './models/art-collection/get-art-collection.dto';
 
-@Controller()
+@Controller('art-collection')
 export class ArtCollectionController {
   constructor(private artCollectionService: ArtCollectionService) {}
 

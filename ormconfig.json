@@ -2,7 +2,7 @@
   "type": "mssql",
   "host": "localhost",
   "username": "sa",
-  "password": "reallyStrongPwd123",
+  "password": "yourStrong(!)Password",
   "database": "catalart",
   "synchronize": true,
   "logging": false,
