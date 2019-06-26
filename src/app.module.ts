@@ -3,11 +3,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 
 import { ArtworkController } from './api/artwork.controller';
+import { ArtCollectionController } from './api/art-collection.controller';
+import { AuthController } from './api/auth.controller';
 
 import { ArtworkService } from './business/services/artwork.service';
 import { AuthService } from './business/services/auth.service';
 import { HttpStrategy } from './business/services/http.strategy';
 import { UserService } from './business/services/user.service';
+import { TagService } from './business/services/tag.service';
+import { ArtistService } from './business/services/artist.service';
+import { ArtCollectionService } from './business/services/art-collection.service';
 
 import { Artwork } from './dal/entity/artwork.entity';
 import { User } from './dal/entity/user.entity';
@@ -21,7 +26,7 @@ import { Tag } from './dal/entity/tag.entity';
     TypeOrmModule.forFeature([Artwork, User, ArtCollection, Artist, Tag]),
     PassportModule.register({ defaultStrategy: 'bearer' })
   ],
-  controllers: [ArtworkController],
-  providers: [ArtworkService, AuthService, HttpStrategy, UserService]
+  controllers: [ArtworkController, ArtCollectionController, AuthController],
+  providers: [ArtworkService, AuthService, HttpStrategy, UserService, ArtistService, TagService, ArtCollectionService]
 })
 export class AppModule {}

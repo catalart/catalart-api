@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import { Artwork } from './artwork.entity';
 
 @Entity()
@@ -10,5 +10,6 @@ export class Tag {
   tag: string;
 
   @ManyToMany(type => Artwork, artwork => artwork.generalSubjectTerms)
+  @JoinTable()
   artwork: Promise<Artwork[]>;
 }

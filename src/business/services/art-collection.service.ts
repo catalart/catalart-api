@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DeepPartial } from 'typeorm';
 
-import { ArtCollection } from 'src/dal/entity/art-collection.entity';
+import { ArtCollection } from '../../dal/entity/art-collection.entity';
 
 @Injectable()
 export class ArtCollectionService {
   constructor(
     @InjectRepository(ArtCollection)
-    private readonly artCollectionRepository: Repository<ArtCollection>,
+    private readonly artCollectionRepository: Repository<ArtCollection>
   ) {}
 
   getArtCollectionById(id: number): Promise<ArtCollection> {

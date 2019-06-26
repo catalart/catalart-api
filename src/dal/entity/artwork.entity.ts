@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne } from 'typeorm';
 import { Tag } from './tag.entity';
 import { Artist } from './artist.entity';
 
@@ -23,7 +23,7 @@ export class Artwork {
   generalSubjectTerms: Promise<Tag[]>;
 
   @ManyToOne(type => Artist, artist => artist.artwork)
-  creator: Artist;
+  creator: Promise<Artist>;
 
   @Column()
   creationDate: string;

@@ -1,11 +1,11 @@
 import { Controller, Get, Param, Post, Body, Put, UseGuards } from '@nestjs/common';
 
-import { ArtCollectionService } from 'src/business/services/art-collection.service';
+import { ArtCollectionService } from '../business/services/art-collection.service';
 
-import { ListArtCollectionDto } from './models/art-collection/list-art-collection.dto';
-import { UpdateArtCollectionDto } from './models/art-collection/update-art-collection.dto';
-import { CreateArtCollectionDto } from './models/art-collection/create-art-collection.dto';
-import { GetArtCollectionDto } from './models/art-collection/get-art-collection.dto';
+import { ListArtCollectionDto } from '../business/models/art-collection/list-art-collection.dto';
+import { UpdateArtCollectionDto } from '../business/models/art-collection/update-art-collection.dto';
+import { CreateArtCollectionDto } from '../business/models/art-collection/create-art-collection.dto';
+import { GetArtCollectionDto } from '../business/models/art-collection/get-art-collection.dto';
 
 @Controller('art-collection')
 export class ArtCollectionController {
