@@ -19,4 +19,16 @@ export class TagService {
       })
     );
   }
+
+  async updateTags(artworkId: number, tags: string[]): Promise<Tag[]> {
+    const tagIds = await this.tagRepository.findByIds([artworkId]);
+    await this.tagRepository.remove(tagIds);
+    return Promise.all(
+      tags.map(tag => {
+        const newTag = new Tag();
+        newTag.tag = tag;
+        return this.tagRepository.save(newTag);
+      })
+    );
+  }
 }

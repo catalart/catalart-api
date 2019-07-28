@@ -1,55 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { Artwork } from '../../dal/entity/artwork.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeepPartial } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateArtworkDto } from '../../business/models/artwork/create-artwork.dto';
-import { CreationDateDto } from '../../business/models/creation-date.dto';
-import { TagService } from './tag.service';
-import { ArtistService } from './artist.service';
 import { ListArtworkDto } from '../models/artwork/list-art-collection.dto';
+import { UpdateArtworkDto } from '../models/artwork/update-artwork.dto';
+import { ArtworkMappingService } from './maps/artwork-mapping.service';
+import { GetArtWorkDto } from '../models/artwork/get-artwork.dto';
 
 @Injectable()
 export class ArtworkService {
   constructor(
     @InjectRepository(Artwork)
     private readonly artworkRepository: Repository<Artwork>,
-    private readonly tagService: TagService,
-    private readonly artistService: ArtistService
+    private readonly artistMappingService: ArtworkMappingService
   ) {}
 
   async getAllArtwork(): Promise<ListArtworkDto[]> {
     const artworkList = await this.artworkRepository.find({ relations: ['creator'] });
-    return Promise.all(
-      artworkList.map(async (artwork: Artwork) => {
-        return {
-          id: artwork.id,
-          title: artwork.title,
-          creationDate: artwork.creationDate,
-          creatorIdentity: (await artwork.creator).name,
-          preview: artwork.preview
-        } as ListArtworkDto;
-      })
-    );
+    return this.artistMappingService.mapFromArtworkToList(artworkList);
   }
 
-  async addArtwork(createdArtwork: CreateArtworkDto) {
-    const artwork = new Artwork();
+  async getArtworkById(id: number): Promise<GetArtWorkDto> {
+    const artwork = await this.artworkRepository.findOneOrFail(id, { relations: ['creator', 'generalSubjectTerms'] });
+    return this.artistMappingService.mapToGetArtwork(artwork);
+  }
 
-    artwork.classificationTerm = createdArtwork.classificationTerm;
-    artwork.title = createdArtwork.title;
-    artwork.dimensions = createdArtwork.dimensions;
-    artwork.materialsAndTechniquesDescription = createdArtwork.materialsAndTechniquesDescription;
-    artwork.generalSubjectTerms = this.tagService.addTags(createdArtwork.generalSubjectTerms);
-    artwork.creator = this.artistService.addArtist(createdArtwork.creator);
-    artwork.creationDate = CreationDateDto.to(createdArtwork.creationDate);
-    artwork.currentLocation = createdArtwork.currentLocation;
-    artwork.preview = createdArtwork.preview;
-    artwork.citation = createdArtwork.citation;
-
+  async addArtwork(createdArtwork: CreateArtworkDto): Promise<Artwork> {
+    const artwork = await this.artistMappingService.mapFromCreatedArtwork(createdArtwork);
     return this.artworkRepository.save(artwork);
   }
 
-  saveArtwork(artwork: DeepPartial<Artwork>) {
+  async updateArtwork(updatedArtwork: UpdateArtworkDto): Promise<Artwork> {
+    const artwork = await this.artistMappingService.mapFromUpdatedArtwork(updatedArtwork);
     return this.artworkRepository.save(artwork);
   }
 }

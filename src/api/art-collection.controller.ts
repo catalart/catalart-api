@@ -30,6 +30,6 @@ export class ArtCollectionController {
   @Put()
   @UseGuards()
   async updateArtCollection(@Body() updateArtCollectionDto: UpdateArtCollectionDto) {
-    return this.artCollectionService.addArtCollection(updateArtCollectionDto);
+    return this.artCollectionService.saveArtCollection(updateArtCollectionDto);
   }
 }
