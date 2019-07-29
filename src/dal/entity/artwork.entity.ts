@@ -19,7 +19,7 @@ export class Artwork {
   @Column()
   materialsAndTechniquesDescription: string;
 
-  @ManyToMany(type => Tag, tag => tag.artwork)
+  @ManyToMany(type => Tag, tag => tag.artwork, { cascade: true })
   generalSubjectTerms: Promise<Tag[]>;
 
   @ManyToOne(type => Artist, artist => artist.artwork)

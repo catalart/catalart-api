@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 
 import { ArtworkService } from '../business/services/artwork.service';
 
@@ -30,5 +30,10 @@ export class ArtworkController {
   updateArtwork(@Param('id') id: number, @Body() updateArtDto: UpdateArtworkDto) {
     updateArtDto.id = id;
     return this.artworkService.updateArtwork(updateArtDto);
+  }
+
+  @Delete(':id')
+  deleteArtwork(@Param('id') id: number) {
+    return this.artworkService.deleteArtwork(id);
   }
 }

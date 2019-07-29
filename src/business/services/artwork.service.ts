@@ -36,4 +36,9 @@ export class ArtworkService {
     const artwork = await this.artistMappingService.mapFromUpdatedArtwork(updatedArtwork, originalArtwork);
     return this.artworkRepository.save(artwork);
   }
+
+  async deleteArtwork(artworkId: number) {
+    const originalArtwork = await this.artworkRepository.findOneOrFail(artworkId, { relations: ['generalSubjectTerms'] });
+    return this.artworkRepository.remove(originalArtwork);
+  }
 }
