@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Artwork } from '../../dal/entity/artwork.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateArtworkDto } from '../../business/models/artwork/create-artwork.dto';
 import { ListArtworkDto } from '../models/artwork/list-art-collection.dto';
 import { UpdateArtworkDto } from '../models/artwork/update-artwork.dto';
@@ -32,7 +32,8 @@ export class ArtworkService {
   }
 
   async updateArtwork(updatedArtwork: UpdateArtworkDto): Promise<Artwork> {
-    const artwork = await this.artistMappingService.mapFromUpdatedArtwork(updatedArtwork);
+    const originalArtwork = await this.artworkRepository.findOneOrFail(updatedArtwork.id);
+    const artwork = await this.artistMappingService.mapFromUpdatedArtwork(updatedArtwork, originalArtwork);
     return this.artworkRepository.save(artwork);
   }
 }

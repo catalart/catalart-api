@@ -3,7 +3,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ArtistDto } from '../business/models/artist/artist.dto';
 import { ArtistService } from '../business/services/artist.service';
 
-@Controller('artist')
+@Controller('artists')
 export class ArtistController {
   constructor(private artistService: ArtistService) {}
 

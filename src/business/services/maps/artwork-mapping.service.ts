@@ -40,9 +40,7 @@ export class ArtworkMappingService {
     return Promise.resolve(artwork);
   }
 
-  async mapFromUpdatedArtwork(updatedArtwork: UpdateArtworkDto): Promise<Artwork> {
-    const artwork = new Artwork();
-
+  async mapFromUpdatedArtwork(updatedArtwork: UpdateArtworkDto, artwork: Artwork): Promise<Artwork> {
     artwork.classificationTerm = updatedArtwork.classificationTerm;
     artwork.title = updatedArtwork.title;
     artwork.dimensions = updatedArtwork.dimensions;
@@ -77,6 +75,7 @@ export class ArtworkMappingService {
   async mapToGetArtwork(artwork: Artwork): Promise<GetArtWorkDto> {
     const artworkToGet = new GetArtWorkDto();
 
+    artworkToGet.id = artwork.id;
     artworkToGet.classificationTerm = artwork.classificationTerm;
     artworkToGet.title = artwork.title;
     artworkToGet.dimensions = artwork.dimensions;

@@ -26,8 +26,9 @@ export class ArtworkController {
     return this.artworkService.addArtwork(createArtDto);
   }
 
-  @Put()
-  updateArtwork(@Body() createArtDto: UpdateArtworkDto) {
-    return this.artworkService.updateArtwork(createArtDto);
+  @Put(':id')
+  updateArtwork(@Param('id') id: number, @Body() updateArtDto: UpdateArtworkDto) {
+    updateArtDto.id = id;
+    return this.artworkService.updateArtwork(updateArtDto);
   }
 }
