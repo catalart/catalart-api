@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Artwork } from './artwork.entity';
 
 @Entity()
 export class ArtCollection {
@@ -17,6 +18,6 @@ export class ArtCollection {
   @Column()
   location: string;
 
-  @Column()
-  containsArtCollections: boolean;
+  @OneToMany(type => Artwork, artwork => artwork.artCollection)
+  artwork: Promise<Artwork[]>;
 }

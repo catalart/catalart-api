@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne } from 'typeorm';
 import { Tag } from './tag.entity';
 import { Artist } from './artist.entity';
+import { ArtCollection } from './art-collection.entity';
 
 @Entity()
 export class Artwork {
@@ -36,4 +37,7 @@ export class Artwork {
 
   @Column()
   citation: string;
+
+  @ManyToOne(type => ArtCollection, artCollection => artCollection.artwork, { nullable: true })
+  artCollection: Promise<ArtCollection>;
 }

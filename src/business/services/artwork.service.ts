@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Artwork } from '../../dal/entity/artwork.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateArtworkDto } from '../../business/models/artwork/create-artwork.dto';
 import { ListArtworkDto } from '../models/artwork/list-art-collection.dto';
 import { UpdateArtworkDto } from '../models/artwork/update-artwork.dto';
@@ -40,5 +40,9 @@ export class ArtworkService {
   async deleteArtwork(artworkId: number) {
     const originalArtwork = await this.artworkRepository.findOneOrFail(artworkId, { relations: ['generalSubjectTerms'] });
     return this.artworkRepository.remove(originalArtwork);
+  }
+
+  getArtworkByIds(ids: number[]): Promise<Artwork[]> {
+    return this.artworkRepository.findByIds(ids);
   }
 }
