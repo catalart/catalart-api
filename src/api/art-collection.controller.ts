@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put, UseGuards, Delete } from '@nestjs/common';
 
 import { ArtCollectionService } from '../business/services/art-collection.service';
 
@@ -27,9 +27,15 @@ export class ArtCollectionController {
     return this.artCollectionService.addArtCollection(createArtCollectionDto);
   }
 
-  @Put()
+  @Put(':id')
   @UseGuards()
-  async updateArtCollection(@Body() updateArtCollectionDto: UpdateArtCollectionDto) {
+  async updateArtCollection(@Param('id') id: number, @Body() updateArtCollectionDto: UpdateArtCollectionDto) {
+    updateArtCollectionDto.id = id;
     return this.artCollectionService.saveArtCollection(updateArtCollectionDto);
+  }
+
+  @Delete(':id')
+  deleteArtCollection(@Param('id') id: number) {
+    return this.artCollectionService.deleteArtCollection(id);
   }
 }

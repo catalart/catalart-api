@@ -1,10 +1,10 @@
 import { Enumeration } from '../enumeration.model';
 
 export class UpdateArtCollectionDto {
-  readonly id: number;
-  readonly name: string;
-  readonly type: string;
-  readonly description: string;
-  readonly location: string;
-  readonly artwork: Enumeration[];
+  id: number;
+  name: string;
+  type: string;
+  description: string;
+  location: string;
+  artwork: Enumeration[];
 }

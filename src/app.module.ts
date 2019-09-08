@@ -23,6 +23,7 @@ import { User } from './dal/entity/user.entity';
 import { ArtCollection } from './dal/entity/art-collection.entity';
 import { Artist } from './dal/entity/artist.entity';
 import { Tag } from './dal/entity/tag.entity';
+import { ArtCollectionMappingService } from './business/services/maps/art-collection-mapping.service';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { Tag } from './dal/entity/tag.entity';
     ArtCollectionService,
     ArtistMappingService,
     ArtworkMappingService,
-    TagMappingService
+    TagMappingService,
+    ArtCollectionMappingService
   ]
 })
 export class AppModule {}
