@@ -16,3 +16,9 @@ A simple API that powers the catalog
 ```bash
   npm run typeorm-generate AddArtworkAndArtCollections
 ```
+
+- Applying migrations
+
+```bash
+npm run typeorm-run
+```
