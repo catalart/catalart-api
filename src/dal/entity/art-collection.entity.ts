@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import { Artwork } from './artwork.entity';
 
 @Entity()
@@ -18,6 +18,7 @@ export class ArtCollection {
   @Column()
   location: string;
 
-  @OneToMany(type => Artwork, artwork => artwork.artCollection)
+  @ManyToMany(type => Artwork, artwork => artwork.artCollection)
+  @JoinTable()
   artwork: Promise<Artwork[]>;
 }

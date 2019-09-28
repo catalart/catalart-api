@@ -8,6 +8,7 @@ import { UpdateArtCollectionDto } from '../../models/art-collection/update-art-c
 import { ArtCollection } from '../../../dal/entity/art-collection.entity';
 import { GetArtCollectionDto } from '../../models/art-collection/get-art-collection.dto';
 import { ListArtCollectionDto } from '../../models/art-collection/list-art-collection.dto';
+import { Option } from '../../models/option.model';
 
 @Injectable()
 export class ArtCollectionMappingService {
@@ -22,6 +23,7 @@ export class ArtCollectionMappingService {
     getArtCollection.name = artCollection.name;
     getArtCollection.type = artCollection.type;
     const artwork = await artCollection.artwork;
+    getArtCollection.artwork = artwork.map(art => new Option(art.id, art.title));
 
     return Promise.resolve(getArtCollection);
   }
@@ -61,6 +63,8 @@ export class ArtCollectionMappingService {
     if ((updatedArtCollection.artwork || []).length > 0) {
       const artwork = this.artworkService.getArtworkByIds(updatedArtCollection.artwork.map(a => a.id));
       existingArtCollection.artwork = artwork;
+    } else {
+      existingArtCollection.artwork = Promise.resolve([]);
     }
 
     return Promise.resolve(existingArtCollection);
