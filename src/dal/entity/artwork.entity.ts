@@ -38,6 +38,6 @@ export class Artwork {
   @Column()
   citation: string;
 
-  @ManyToOne(type => ArtCollection, artCollection => artCollection.artwork, { nullable: true })
-  artCollection: Promise<ArtCollection>;
+  @ManyToMany(type => ArtCollection, artCollection => artCollection.artwork, { cascade: true })
+  artCollection: Promise<ArtCollection[]>;
 }
