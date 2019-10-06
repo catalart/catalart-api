@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Artwork } from './artwork.entity';
+import { Queryable } from '@dal/decorators/queryable.decorator';
 
 @Entity()
 export class Artist {
@@ -7,6 +8,7 @@ export class Artist {
   id: number;
 
   @Column()
+  @Queryable
   name: string;
 
   @Column()

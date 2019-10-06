@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Put, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Delete, Put, Post, Body, Param, Query } from '@nestjs/common';
 
 import { ArtistDto } from '../business/models/artist/artist.dto';
 import { ArtistService } from '../business/services/artist.service';
@@ -9,7 +9,7 @@ export class ArtistController {
   constructor(private artistService: ArtistService) {}
 
   @Get()
-  getAllArtists(query: ArtistQuery): Promise<ArtistDto[]> {
+  getAllArtists(@Query() query: ArtistQuery): Promise<ArtistDto[]> {
     return this.artistService.getAllArtists(query);
   }
 

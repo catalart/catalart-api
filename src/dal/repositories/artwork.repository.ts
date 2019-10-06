@@ -1,4 +1,4 @@
-import { EntityRepository, Repository, FindManyOptions } from 'typeorm';
+import { EntityRepository, FindManyOptions, FindConditions, Like } from 'typeorm';
 import { Artwork } from '@dal/entity/artwork.entity';
 import { ArtworkQuery } from '@api/queries/artwork.query';
 import { BaseRepository } from './base.repository';
@@ -7,6 +7,14 @@ import { BaseRepository } from './base.repository';
 export class ArtworkRepository extends BaseRepository<Artwork> {
   search(query: ArtworkQuery, options?: FindManyOptions<Artwork>): Promise<Artwork[]> {
     query = Object.assign(new ArtworkQuery(), query);
-    return super.search(query, options);
+    return super.searchWithFilter(Artwork, query, options);
+  }
+
+  determineSearchFilter(filter: string): Array<FindConditions<Artwork>> {
+    return [
+      {
+        title: Like(`%${filter}%`)
+      }
+    ];
   }
 }
