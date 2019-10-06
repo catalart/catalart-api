@@ -24,14 +24,16 @@ import { ArtCollection } from './dal/entity/art-collection.entity';
 import { Artist } from './dal/entity/artist.entity';
 import { Tag } from './dal/entity/tag.entity';
 import { ArtCollectionMappingService } from './business/services/maps/art-collection-mapping.service';
+import { ArtworkRepository } from '@dal/repositories/artwork.repository';
+import { BaseArtworkController } from '@api/base/base-artwork.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([Artwork, User, ArtCollection, Artist, Tag]),
+    TypeOrmModule.forFeature([Artwork, User, ArtCollection, Artist, Tag, ArtworkRepository]),
     PassportModule.register({ defaultStrategy: 'bearer' })
   ],
-  controllers: [ArtworkController, ArtCollectionController, AuthController, ArtistController],
+  controllers: [ArtworkController, ArtCollectionController, AuthController, ArtistController, BaseArtworkController],
   providers: [
     ArtworkService,
     AuthService,

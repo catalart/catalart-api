@@ -11,6 +11,7 @@ import { ListArtworkDto } from '../../models/artwork/list-art-collection.dto';
 import { GetArtWorkDto } from '../../models/artwork/get-artwork.dto';
 import { TagMappingService } from './tag-mapping.service';
 import { ArtistMappingService } from './artist-mapping.service';
+import { Option } from '@business/models/option.model';
 
 @Injectable()
 export class ArtworkMappingService {
@@ -70,6 +71,10 @@ export class ArtworkMappingService {
         });
       })
     );
+  }
+
+  mapFromArtworkToOptions(artworkList: Artwork[]): Promise<Option[]> {
+    return Promise.all(artworkList.map((artwork: Artwork) => new Option(artwork.id, artwork.title)));
   }
 
   async mapToGetArtwork(artwork: Artwork): Promise<GetArtWorkDto> {

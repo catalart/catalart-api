@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "sourceMap": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -13,7 +13,10 @@
     "target": "esnext",
     "types": ["node"],
     "paths": {
-      "*": ["node_modules/*"]
+      "*": ["node_modules/*"],
+      "@dal/*": ["dal/*"],
+      "@business/*": ["business/*"],
+      "@api/*": ["api/*"]
     }
   },
   "include": ["src/**/*"]

@@ -7,18 +7,26 @@ import { ListArtworkDto } from '../models/artwork/list-art-collection.dto';
 import { UpdateArtworkDto } from '../models/artwork/update-artwork.dto';
 import { ArtworkMappingService } from './maps/artwork-mapping.service';
 import { GetArtWorkDto } from '../models/artwork/get-artwork.dto';
+import { ArtworkQuery } from '@api/queries/artwork.query';
+import { ArtworkRepository } from '@dal/repositories/artwork.repository';
+import { Option } from '@business/models/option.model';
 
 @Injectable()
 export class ArtworkService {
   constructor(
     @InjectRepository(Artwork)
-    private readonly artworkRepository: Repository<Artwork>,
+    private readonly artworkRepository: ArtworkRepository,
     private readonly artistMappingService: ArtworkMappingService
   ) {}
 
-  async getAllArtwork(): Promise<ListArtworkDto[]> {
-    const artworkList = await this.artworkRepository.find({ relations: ['creator'] });
+  async getAllArtwork(query: ArtworkQuery): Promise<ListArtworkDto[]> {
+    const artworkList = await this.artworkRepository.search(query, { relations: ['creator'] });
     return this.artistMappingService.mapFromArtworkToList(artworkList);
+  }
+
+  async getAllArtworkAsOptions(query: ArtworkQuery): Promise<Option[]> {
+    const artworkList = await this.artworkRepository.search(query, {});
+    return this.artistMappingService.mapFromArtworkToOptions(artworkList);
   }
 
   async getArtworkById(id: number): Promise<GetArtWorkDto> {

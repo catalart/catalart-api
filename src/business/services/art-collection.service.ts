@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeepPartial } from 'typeorm';
+import { Repository } from 'typeorm';
 
-import { ArtCollection } from '../../dal/entity/art-collection.entity';
+import { ArtCollection } from '@dal/entity/art-collection.entity';
 import { CreateArtCollectionDto } from '../models/art-collection/create-art-collection.dto';
 import { ArtCollectionMappingService } from './maps/art-collection-mapping.service';
 import { UpdateArtCollectionDto } from '../models/art-collection/update-art-collection.dto';

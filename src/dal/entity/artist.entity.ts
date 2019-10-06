@@ -12,6 +12,9 @@ export class Artist {
   @Column()
   role: string;
 
+  @Column()
+  preview: string;
+
   @OneToMany(type => Artwork, artwork => artwork.creator)
   artwork: Promise<Artwork[]>;
 }

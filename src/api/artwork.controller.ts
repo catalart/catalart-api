@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Query } from '@nestjs/common';
 
 import { ArtworkService } from '../business/services/artwork.service';
 
@@ -6,6 +6,8 @@ import { ListArtworkDto } from '../business/models/artwork/list-art-collection.d
 import { UpdateArtworkDto } from '../business/models/artwork/update-artwork.dto';
 import { GetArtWorkDto } from '../business/models/artwork/get-artwork.dto';
 import { CreateArtworkDto } from '../business/models/artwork/create-artwork.dto';
+import { ApiQuery } from './queries/api.query';
+import { Artwork } from '@dal/entity/artwork.entity';
 
 @Controller('artwork')
 export class ArtworkController {
@@ -17,8 +19,8 @@ export class ArtworkController {
   }
 
   @Get()
-  getAllArtwork(): Promise<ListArtworkDto[]> {
-    return this.artworkService.getAllArtwork();
+  getAllArtwork(@Query() query: ApiQuery<Artwork>): Promise<ListArtworkDto[]> {
+    return this.artworkService.getAllArtwork(query);
   }
 
   @Post()
