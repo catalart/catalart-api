@@ -22,13 +22,11 @@ export class ArtCollectionController {
   }
 
   @Post()
-  @UseGuards()
   async addArtCollection(@Body() createArtCollectionDto: CreateArtCollectionDto) {
     return this.artCollectionService.addArtCollection(createArtCollectionDto);
   }
 
   @Put(':id')
-  @UseGuards()
   async updateArtCollection(@Param('id') id: number, @Body() updateArtCollectionDto: UpdateArtCollectionDto) {
     updateArtCollectionDto.id = id;
     return this.artCollectionService.saveArtCollection(updateArtCollectionDto);

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { ArtistDto } from '../../models/artist/artist.dto';
 import { Artist } from '../../../dal/entity/artist.entity';
+import { Option } from '@business/models/option.model';
 
 @Injectable()
 export class ArtistMappingService {
@@ -18,6 +19,10 @@ export class ArtistMappingService {
 
   mapToArtistsDto(artists: Artist[]): ArtistDto[] {
     return artists.map(this.mapToArtistDto);
+  }
+
+  mapToOptions(artists: Artist[]): Option[] {
+    return artists.map(artist => new Option(artist.id, artist.name));
   }
 
   mapFromCreatedArtist(createdArtist: ArtistDto): Artist {

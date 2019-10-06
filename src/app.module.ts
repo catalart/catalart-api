@@ -6,6 +6,8 @@ import { ArtworkController } from './api/artwork.controller';
 import { ArtCollectionController } from './api/art-collection.controller';
 import { AuthController } from './api/auth.controller';
 import { ArtistController } from './api/artist.controller';
+import { ArtistReferenceController } from '@api/reference/artist-reference.controller';
+import { ArtworkReferenceController } from '@api/reference/artwork-reference.controller';
 
 import { ArtworkService } from './business/services/artwork.service';
 import { AuthService } from './business/services/auth.service';
@@ -25,15 +27,22 @@ import { Artist } from './dal/entity/artist.entity';
 import { Tag } from './dal/entity/tag.entity';
 import { ArtCollectionMappingService } from './business/services/maps/art-collection-mapping.service';
 import { ArtworkRepository } from '@dal/repositories/artwork.repository';
-import { BaseArtworkController } from '@api/base/base-artwork.controller';
+import { ArtistRepository } from '@dal/repositories/artist.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([Artwork, User, ArtCollection, Artist, Tag, ArtworkRepository]),
+    TypeOrmModule.forFeature([Artwork, User, ArtCollection, Artist, Tag, ArtworkRepository, ArtistRepository]),
     PassportModule.register({ defaultStrategy: 'bearer' })
   ],
-  controllers: [ArtworkController, ArtCollectionController, AuthController, ArtistController, BaseArtworkController],
+  controllers: [
+    ArtworkController,
+    ArtCollectionController,
+    AuthController,
+    ArtistController,
+    ArtistReferenceController,
+    ArtworkReferenceController
+  ],
   providers: [
     ArtworkService,
     AuthService,

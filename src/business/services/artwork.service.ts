@@ -3,7 +3,7 @@ import { Artwork } from '../../dal/entity/artwork.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateArtworkDto } from '../../business/models/artwork/create-artwork.dto';
-import { ListArtworkDto } from '../models/artwork/list-art-collection.dto';
+import { ListArtworkDto } from '../models/artwork/list-artwork.dto';
 import { UpdateArtworkDto } from '../models/artwork/update-artwork.dto';
 import { ArtworkMappingService } from './maps/artwork-mapping.service';
 import { GetArtWorkDto } from '../models/artwork/get-artwork.dto';
@@ -25,7 +25,7 @@ export class ArtworkService {
   }
 
   async getAllArtworkAsOptions(query: ArtworkQuery): Promise<Option[]> {
-    const artworkList = await this.artworkRepository.search(query, {});
+    const artworkList = await this.artworkRepository.search(query);
     return this.artistMappingService.mapFromArtworkToOptions(artworkList);
   }
 
