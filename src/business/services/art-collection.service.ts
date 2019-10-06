@@ -8,12 +8,14 @@ import { ArtCollectionMappingService } from './maps/art-collection-mapping.servi
 import { UpdateArtCollectionDto } from '../models/art-collection/update-art-collection.dto';
 import { GetArtCollectionDto } from '../models/art-collection/get-art-collection.dto';
 import { ListArtCollectionDto } from '../models/art-collection/list-art-collection.dto';
+import { ArtCollectionQuery } from '@api/queries/art-collection.query';
+import { ArtCollectionRepository } from '@dal/repositories/art-collection.repository';
 
 @Injectable()
 export class ArtCollectionService {
   constructor(
     @InjectRepository(ArtCollection)
-    private readonly artCollectionRepository: Repository<ArtCollection>,
+    private readonly artCollectionRepository: ArtCollectionRepository,
     private readonly artCollectionMappingService: ArtCollectionMappingService
   ) {}
 
@@ -22,8 +24,8 @@ export class ArtCollectionService {
     return this.artCollectionMappingService.mapToGetArtCollection(artCollection);
   }
 
-  async getAllArtCollections(): Promise<ListArtCollectionDto[]> {
-    const allArtCollections = await this.artCollectionRepository.find();
+  async getAllArtCollections(query: ArtCollectionQuery): Promise<ListArtCollectionDto[]> {
+    const allArtCollections = await this.artCollectionRepository.search(query);
     return this.artCollectionMappingService.mapToListArtCollection(allArtCollections);
   }
 

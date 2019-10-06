@@ -4,7 +4,7 @@ import { Option } from '@business/models/option.model';
 import { ArtistService } from '@business/services/artist.service';
 import { ArtistQuery } from '@api/queries/artist.query';
 
-@Controller('reference/artist')
+@Controller('reference/artists')
 export class ArtistReferenceController {
   constructor(private artistService: ArtistService) {}
 
