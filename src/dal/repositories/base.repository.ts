@@ -1,9 +1,9 @@
-import { Repository, FindManyOptions, Like, FindConditions, FindOperator } from 'typeorm';
+import { Repository, FindManyOptions, Like, FindConditions } from 'typeorm';
 import { ApiQuery } from '@api/queries/api.query';
+import { determineAllQueryableFields } from '@dal/decorators/queryable.decorator';
 import 'reflect-metadata';
-import { queryableUsingClass } from '@dal/decorators/queryable.decorator';
 
-export abstract class BaseRepository<T> extends Repository<T> {
+export class BaseRepository<T> extends Repository<T> {
   searchWithFilter(type: new () => T, query: ApiQuery<T>, options?: FindManyOptions<T>): Promise<T[]> {
     const filter = this.determineFilter(type, query);
     return super.find({
@@ -25,20 +25,27 @@ export abstract class BaseRepository<T> extends Repository<T> {
     const queryLevelFilter = query.determineQueryFilters();
 
     if (!!query.filter) {
-      const properties = this.getAllPropertiesofObject(type);
-      const filterableProperties = properties.filter(property => queryableUsingClass(type, property));
+      // How to get properties on a class?
+      const queryableProperties = determineAllQueryableFields(type) as Array<keyof T>;
       const queryFilter: Array<FindConditions<T>> = [queryLevelFilter];
-      const searchFilter: Array<FindConditions<T>> = [...this.determineSearchFilter(query.filter)];
+      const searchFilter: Array<FindConditions<T>> = this.getQueryFilter(queryableProperties, query.filter);
 
-      return [...searchFilter];
+      return [...queryFilter, ...searchFilter].filter(this.isDefinedFindCondition);
     } else {
-      return [queryLevelFilter];
+      return [queryLevelFilter].filter(this.isDefinedFindCondition);
     }
   }
 
-  private getAllPropertiesofObject(type: new () => T): Array<keyof T> {
-    return Object.getOwnPropertyNames(type) as Array<keyof T>;
+  private getQueryFilter(properties: Array<keyof T>, filter: string): Array<FindConditions<T>> {
+    return properties.map(property => {
+      const filterCondition = {
+        [property]: Like(`%${filter}%`)
+      } as unknown;
+      return filterCondition as FindConditions<T>;
+    });
   }
 
-  abstract determineSearchFilter(filter: string): Array<FindConditions<T>>;
+  private isDefinedFindCondition(findCondition: FindConditions<T>): boolean {
+    return !!findCondition && Object.keys(findCondition).length > 0;
+  }
 }

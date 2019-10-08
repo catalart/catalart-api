@@ -1,13 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne, Index } from 'typeorm';
 import { Tag } from './tag.entity';
 import { Artist } from './artist.entity';
 import { ArtCollection } from './art-collection.entity';
+import { Queryable } from '@dal/decorators/queryable.decorator';
 
 @Entity()
 export class Artwork {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Queryable
+  @Index()
   @Column()
   title: string;
 
