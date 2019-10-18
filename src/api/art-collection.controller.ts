@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, UseGuards, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put, UseGuards, Delete, Query } from '@nestjs/common';
 
 import { ArtCollectionService } from '../business/services/art-collection.service';
 
@@ -6,6 +6,7 @@ import { ListArtCollectionDto } from '../business/models/art-collection/list-art
 import { UpdateArtCollectionDto } from '../business/models/art-collection/update-art-collection.dto';
 import { CreateArtCollectionDto } from '../business/models/art-collection/create-art-collection.dto';
 import { GetArtCollectionDto } from '../business/models/art-collection/get-art-collection.dto';
+import { ArtCollectionQuery } from './queries/art-collection.query';
 
 @Controller('art-collection')
 export class ArtCollectionController {
@@ -17,18 +18,16 @@ export class ArtCollectionController {
   }
 
   @Get()
-  async getAllArtwork(): Promise<ListArtCollectionDto[]> {
-    return this.artCollectionService.getAllArtCollections();
+  async getAllArtwork(@Query() query: ArtCollectionQuery): Promise<ListArtCollectionDto[]> {
+    return this.artCollectionService.getAllArtCollections(query);
   }
 
   @Post()
-  @UseGuards()
   async addArtCollection(@Body() createArtCollectionDto: CreateArtCollectionDto) {
     return this.artCollectionService.addArtCollection(createArtCollectionDto);
   }
 
   @Put(':id')
-  @UseGuards()
   async updateArtCollection(@Param('id') id: number, @Body() updateArtCollectionDto: UpdateArtCollectionDto) {
     updateArtCollectionDto.id = id;
     return this.artCollectionService.saveArtCollection(updateArtCollectionDto);

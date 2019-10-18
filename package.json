@@ -18,9 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm-generate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:generate -n",
-    "typeorm-run": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
-    "typeorm-revert": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:revert"
+    "typeorm-generate": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:generate -n",
+    "typeorm-run": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run",
+    "typeorm-revert": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^6.0.0",
@@ -29,6 +29,9 @@
     "@nestjs/platform-express": "^6.0.0",
     "@nestjs/swagger": "^3.0.2",
     "@nestjs/typeorm": "^6.1.1",
+    "@nestjsx/crud": "^4.2.0",
+    "@nestjsx/crud-request": "^4.2.0",
+    "@nestjsx/crud-typeorm": "^4.2.0",
     "@types/passport-http-bearer": "^1.0.33",
     "mssql": "^5.1.0",
     "passport": "^0.4.0",

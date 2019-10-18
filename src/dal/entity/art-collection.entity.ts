@@ -1,11 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, Index } from 'typeorm';
 import { Artwork } from './artwork.entity';
+import { Queryable } from '@dal/decorators/queryable.decorator';
 
 @Entity()
 export class ArtCollection {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Queryable
+  @Index()
   @Column()
   name: string;
 

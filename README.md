@@ -22,3 +22,10 @@ A simple API that powers the catalog
 ```bash
 npm run typeorm-run
 ```
+
+## Elasticsearch
+
+Data: /usr/local/var/lib/elasticsearch/elasticsearch_sampastoriza/
+Logs: /usr/local/var/log/elasticsearch/elasticsearch_sampastoriza.log
+Plugins: /usr/local/var/elasticsearch/plugins/
+Config: /usr/local/etc/elasticsearch/

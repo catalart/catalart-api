@@ -2,14 +2,14 @@ import { ArtistDto } from '../artist/artist.dto';
 import { CreationDateDto } from '../creation-date.dto';
 
 export class CreateArtworkDto {
-  readonly classificationTerm: string;
-  readonly title: string;
-  readonly creator: ArtistDto;
-  readonly creationDate: CreationDateDto;
-  readonly dimensions: string;
-  readonly materialsAndTechniquesDescription: string;
-  readonly generalSubjectTerms: string[];
-  readonly currentLocation: string;
-  readonly preview: string; // url
-  readonly citation: string;
+  classificationTerm: string;
+  title: string;
+  creator: ArtistDto;
+  creationDate: CreationDateDto;
+  dimensions: string;
+  materialsAndTechniquesDescription: string;
+  generalSubjectTerms: string[];
+  currentLocation: string;
+  preview: string; // url
+  citation: string;
 }

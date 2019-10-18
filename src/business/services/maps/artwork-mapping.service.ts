@@ -3,14 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { ArtistService } from '../artist.service';
 import { TagService } from '../tag.service';
 
-import { CreateArtworkDto } from '../../models/artwork/create-artwork.dto';
-import { Artwork } from '../../../dal/entity/artwork.entity';
-import { UpdateArtworkDto } from '../../models/artwork/update-artwork.dto';
-import { CreationDateDto } from '../../models/creation-date.dto';
-import { ListArtworkDto } from '../../models/artwork/list-art-collection.dto';
-import { GetArtWorkDto } from '../../models/artwork/get-artwork.dto';
+import { CreateArtworkDto } from '@business/models/artwork/create-artwork.dto';
+import { Artwork } from '@dal/entity/artwork.entity';
+import { UpdateArtworkDto } from '@business/models/artwork/update-artwork.dto';
+import { CreationDateDto } from '@business/models/creation-date.dto';
+import { ListArtworkDto } from '@business/models/artwork/list-artwork.dto';
+import { GetArtWorkDto } from '@business/models/artwork/get-artwork.dto';
 import { TagMappingService } from './tag-mapping.service';
 import { ArtistMappingService } from './artist-mapping.service';
+import { Option } from '@business/models/option.model';
 
 @Injectable()
 export class ArtworkMappingService {
@@ -70,6 +71,10 @@ export class ArtworkMappingService {
         });
       })
     );
+  }
+
+  mapFromArtworkToOptions(artworkList: Artwork[]): Promise<Option[]> {
+    return Promise.all(artworkList.map((artwork: Artwork) => new Option(artwork.id, artwork.title)));
   }
 
   async mapToGetArtwork(artwork: Artwork): Promise<GetArtWorkDto> {
