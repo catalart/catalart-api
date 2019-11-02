@@ -15,8 +15,8 @@ export class BaseRepository<T> extends Repository<T> {
       lock: !!options ? options.lock : null,
       order: !!options ? options.order : null,
       select: !!options ? options.select : null,
-      take: query.limit,
-      skip: query.offset,
+      take: +query.limit,
+      skip: +query.offset,
       where: filter
     });
   }

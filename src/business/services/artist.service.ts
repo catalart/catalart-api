@@ -23,6 +23,7 @@ export class ArtistService {
       const newArtist = new Artist();
       newArtist.name = artist.identity;
       newArtist.role = artist.role;
+      newArtist.preview = '';
       return this.artistRepository.save(newArtist);
     } else {
       return this.artistRepository.findOneOrFail(artist.id);
