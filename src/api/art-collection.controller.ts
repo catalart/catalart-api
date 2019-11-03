@@ -7,6 +7,7 @@ import { UpdateArtCollectionDto } from '../business/models/art-collection/update
 import { CreateArtCollectionDto } from '../business/models/art-collection/create-art-collection.dto';
 import { GetArtCollectionDto } from '../business/models/art-collection/get-art-collection.dto';
 import { ArtCollectionQuery } from './queries/art-collection.query';
+import { ListResponse } from '@business/models/list-response.model';
 
 @Controller('art-collection')
 export class ArtCollectionController {
@@ -18,7 +19,7 @@ export class ArtCollectionController {
   }
 
   @Get()
-  async getAllArtwork(@Query() query: ArtCollectionQuery): Promise<ListArtCollectionDto[]> {
+  async getAllArtwork(@Query() query: ArtCollectionQuery): Promise<ListResponse<ListArtCollectionDto>> {
     return this.artCollectionService.getAllArtCollections(query);
   }
 

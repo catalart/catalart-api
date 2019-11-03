@@ -10,6 +10,7 @@ import { GetArtWorkDto } from '../models/artwork/get-artwork.dto';
 import { ArtworkQuery } from '@api/queries/artwork.query';
 import { ArtworkRepository } from '@dal/repositories/artwork.repository';
 import { Option } from '@business/models/option.model';
+import { ListResponse } from '@business/models/list-response.model';
 
 @Injectable()
 export class ArtworkService {
@@ -19,9 +20,12 @@ export class ArtworkService {
     private readonly artistMappingService: ArtworkMappingService
   ) {}
 
-  async getAllArtwork(query: ArtworkQuery): Promise<ListArtworkDto[]> {
+  async getAllArtwork(query: ArtworkQuery): Promise<ListResponse<ListArtworkDto>> {
     const artworkList = await this.artworkRepository.search(query, { relations: ['creator'] });
-    return this.artistMappingService.mapFromArtworkToList(artworkList);
+    const artworkTotal = await this.artworkRepository.count();
+    const mappedArtwork = await this.artistMappingService.mapFromArtworkToList(artworkList);
+    const response = new ListResponse<ListArtworkDto>(mappedArtwork, artworkTotal);
+    return Promise.resolve(response);
   }
 
   async getAllArtworkAsOptions(query: ArtworkQuery): Promise<Option[]> {

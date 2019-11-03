@@ -29,6 +29,8 @@ import { ArtCollectionMappingService } from './business/services/maps/art-collec
 import { ArtworkRepository } from '@dal/repositories/artwork.repository';
 import { ArtistRepository } from '@dal/repositories/artist.repository';
 import { ArtCollectionRepository } from '@dal/repositories/art-collection.repository';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { TransformInterceptor } from '@api/interceptors/transform.interceptor';
 
 @Module({
   imports: [
@@ -55,7 +57,11 @@ import { ArtCollectionRepository } from '@dal/repositories/art-collection.reposi
     ArtistMappingService,
     ArtworkMappingService,
     TagMappingService,
-    ArtCollectionMappingService
+    ArtCollectionMappingService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor
+    }
   ]
 })
 export class AppModule {}
