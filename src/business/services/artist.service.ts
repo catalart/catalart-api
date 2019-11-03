@@ -6,9 +6,9 @@ import { Artist } from '@dal/entity/artist.entity';
 import { ArtistDto } from '../models/artist/artist.dto';
 import { ArtistMappingService } from './maps/artist-mapping.service';
 import { Option } from '@business/models/option.model';
-import { ApiQuery } from '@api/queries/api.query';
 import { ArtistQuery } from '@api/queries/artist.query';
 import { ArtistRepository } from '@dal/repositories/artist.repository';
+import { ListResponse } from '@business/models/list-response.model';
 
 @Injectable()
 export class ArtistService {
@@ -35,9 +35,12 @@ export class ArtistService {
     return this.artistMappingService.mapToArtistDto(artist);
   }
 
-  async getAllArtists(query: ArtistQuery): Promise<ArtistDto[]> {
+  async getAllArtists(query: ArtistQuery): Promise<ListResponse<ArtistDto>> {
     const artists = await this.artistRepository.search(query);
-    return this.artistMappingService.mapToArtistsDto(artists);
+    const totalNumberOfArtists = await this.artistRepository.count();
+    const artistList = this.artistMappingService.mapToArtistsDto(artists);
+    const response = new ListResponse<ArtistDto>(artistList, totalNumberOfArtists);
+    return Promise.resolve(response);
   }
 
   async getAllArtistsAsOptions(query: ArtistQuery): Promise<Option[]> {

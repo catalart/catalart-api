@@ -10,6 +10,7 @@ import { GetArtCollectionDto } from '../models/art-collection/get-art-collection
 import { ListArtCollectionDto } from '../models/art-collection/list-art-collection.dto';
 import { ArtCollectionQuery } from '@api/queries/art-collection.query';
 import { ArtCollectionRepository } from '@dal/repositories/art-collection.repository';
+import { ListResponse } from '@business/models/list-response.model';
 
 @Injectable()
 export class ArtCollectionService {
@@ -24,9 +25,12 @@ export class ArtCollectionService {
     return this.artCollectionMappingService.mapToGetArtCollection(artCollection);
   }
 
-  async getAllArtCollections(query: ArtCollectionQuery): Promise<ListArtCollectionDto[]> {
+  async getAllArtCollections(query: ArtCollectionQuery): Promise<ListResponse<ListArtCollectionDto>> {
     const allArtCollections = await this.artCollectionRepository.search(query);
-    return this.artCollectionMappingService.mapToListArtCollection(allArtCollections);
+    const artCollectionCount = await this.artCollectionRepository.count();
+    const mappedArtCollections = await this.artCollectionMappingService.mapToListArtCollection(allArtCollections);
+    const response = new ListResponse<ListArtCollectionDto>(mappedArtCollections, artCollectionCount);
+    return Promise.resolve(response);
   }
 
   async addArtCollection(createdArtCollection: CreateArtCollectionDto): Promise<ArtCollection> {

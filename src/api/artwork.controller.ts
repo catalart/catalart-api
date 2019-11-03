@@ -9,6 +9,7 @@ import { CreateArtworkDto } from '../business/models/artwork/create-artwork.dto'
 import { ApiQuery } from './queries/api.query';
 import { Artwork } from '@dal/entity/artwork.entity';
 import { ArtworkQuery } from './queries/artwork.query';
+import { ListResponse } from '@business/models/list-response.model';
 
 @Controller('artwork')
 export class ArtworkController {
@@ -20,7 +21,7 @@ export class ArtworkController {
   }
 
   @Get()
-  getAllArtwork(@Query() query: ArtworkQuery): Promise<ListArtworkDto[]> {
+  getAllArtwork(@Query() query: ArtworkQuery): Promise<ListResponse<ListArtworkDto>> {
     return this.artworkService.getAllArtwork(query);
   }
 
