@@ -29,7 +29,7 @@ export class ArtistMappingService {
     const artist = new Artist();
 
     artist.name = createdArtist.identity;
-    artist.preview = createdArtist.preview;
+    artist.preview = createdArtist.preview || '';
     artist.role = createdArtist.role;
 
     return artist;

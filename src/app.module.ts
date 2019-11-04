@@ -31,11 +31,27 @@ import { ArtistRepository } from '@dal/repositories/artist.repository';
 import { ArtCollectionRepository } from '@dal/repositories/art-collection.repository';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from '@api/interceptors/transform.interceptor';
+import { ReferenceMappingService } from '@business/services/maps/reference-mapping.service';
+import { ClassificationTermService } from '@business/services/reference/classification-term.service';
+import { ClassificationTermRepository } from '@dal/repositories/classification-term.repository';
+import { ClassificationTerm } from '@dal/entity/reference/classification-term.entity';
+import { ClassificationTermReferenceController } from '@api/reference/classification-term-reference.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([Artwork, User, ArtCollection, Artist, Tag, ArtworkRepository, ArtistRepository, ArtCollectionRepository]),
+    TypeOrmModule.forFeature([
+      Artwork,
+      User,
+      ArtCollection,
+      Artist,
+      Tag,
+      ClassificationTerm,
+      ArtworkRepository,
+      ArtistRepository,
+      ArtCollectionRepository,
+      ClassificationTermRepository
+    ]),
     PassportModule.register({ defaultStrategy: 'bearer' })
   ],
   controllers: [
@@ -44,9 +60,14 @@ import { TransformInterceptor } from '@api/interceptors/transform.interceptor';
     AuthController,
     ArtistController,
     ArtistReferenceController,
-    ArtworkReferenceController
+    ArtworkReferenceController,
+    ClassificationTermReferenceController
   ],
   providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor
+    },
     ArtworkService,
     AuthService,
     HttpStrategy,
@@ -58,10 +79,8 @@ import { TransformInterceptor } from '@api/interceptors/transform.interceptor';
     ArtworkMappingService,
     TagMappingService,
     ArtCollectionMappingService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TransformInterceptor
-    }
+    ReferenceMappingService,
+    ClassificationTermService
   ]
 })
 export class AppModule {}

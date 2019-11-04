@@ -18,18 +18,6 @@ export class ArtistService {
     private readonly artistMappingService: ArtistMappingService
   ) {}
 
-  getOrCreateArtist(artist: ArtistDto): Promise<Artist> {
-    if (!artist.id) {
-      const newArtist = new Artist();
-      newArtist.name = artist.identity;
-      newArtist.role = artist.role;
-      newArtist.preview = '';
-      return this.artistRepository.save(newArtist);
-    } else {
-      return this.artistRepository.findOneOrFail(artist.id);
-    }
-  }
-
   async getArtistById(artistId: number): Promise<ArtistDto> {
     const artist = await this.artistRepository.findOneOrFail(artistId);
     return this.artistMappingService.mapToArtistDto(artist);

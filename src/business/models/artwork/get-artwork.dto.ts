@@ -1,9 +1,10 @@
 import { ArtistDto } from '../artist/artist.dto';
 import { CreationDateDto } from '../creation-date.dto';
+import { Option } from '../option.model';
 
 export class GetArtWorkDto {
   id: number;
-  classificationTerm: string;
+  classificationTerm: Option;
   title: string;
   creator: ArtistDto;
   creationDate: CreationDateDto;

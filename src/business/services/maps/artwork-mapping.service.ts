@@ -12,6 +12,7 @@ import { GetArtWorkDto } from '@business/models/artwork/get-artwork.dto';
 import { TagMappingService } from './tag-mapping.service';
 import { ArtistMappingService } from './artist-mapping.service';
 import { Option } from '@business/models/option.model';
+import { ReferenceMappingService } from './reference-mapping.service';
 
 @Injectable()
 export class ArtworkMappingService {
@@ -19,20 +20,25 @@ export class ArtworkMappingService {
     private readonly tagService: TagService,
     private readonly artistService: ArtistService,
     private readonly tagMappingService: TagMappingService,
-    private readonly artistMappingService: ArtistMappingService
+    private readonly artistMappingService: ArtistMappingService,
+    private readonly referenceMappingService: ReferenceMappingService
   ) {}
 
   async mapFromCreatedArtwork(createdArtwork: CreateArtworkDto): Promise<Artwork> {
     const artwork = new Artwork();
 
-    artwork.classificationTerm = createdArtwork.classificationTerm;
+    artwork.classificationTermId = createdArtwork.classificationTerm.id;
     artwork.title = createdArtwork.title;
     artwork.dimensions = createdArtwork.dimensions;
     artwork.materialsAndTechniquesDescription = createdArtwork.materialsAndTechniquesDescription;
     const tags = await this.tagService.addTags(createdArtwork.generalSubjectTerms);
     artwork.generalSubjectTerms = Promise.resolve(tags);
-    const artist = await this.artistService.getOrCreateArtist(createdArtwork.creator);
-    artwork.creator = Promise.resolve(artist);
+    if (!!createdArtwork.creator.id) {
+      artwork.creatorId = createdArtwork.creator.id;
+    } else {
+      const artist = await this.artistService.addArtist(createdArtwork.creator);
+      artwork.creatorId = artist.id;
+    }
     artwork.creationDate = CreationDateDto.to(createdArtwork.creationDate);
     artwork.currentLocation = createdArtwork.currentLocation;
     artwork.preview = createdArtwork.preview;
@@ -42,14 +48,18 @@ export class ArtworkMappingService {
   }
 
   async mapFromUpdatedArtwork(updatedArtwork: UpdateArtworkDto, artwork: Artwork): Promise<Artwork> {
-    artwork.classificationTerm = updatedArtwork.classificationTerm;
+    artwork.classificationTermId = updatedArtwork.classificationTerm.id;
     artwork.title = updatedArtwork.title;
     artwork.dimensions = updatedArtwork.dimensions;
     artwork.materialsAndTechniquesDescription = updatedArtwork.materialsAndTechniquesDescription;
     const tags = await this.tagService.updateTags(updatedArtwork.id, updatedArtwork.generalSubjectTerms);
     artwork.generalSubjectTerms = Promise.resolve(tags);
-    const artist = await this.artistService.getOrCreateArtist(updatedArtwork.creator);
-    artwork.creator = Promise.resolve(artist);
+    if (!!updatedArtwork.creator.id) {
+      artwork.creatorId = updatedArtwork.creator.id;
+    } else {
+      const artist = await this.artistService.addArtist(updatedArtwork.creator);
+      artwork.creatorId = artist.id;
+    }
     artwork.creationDate = CreationDateDto.to(updatedArtwork.creationDate);
     artwork.currentLocation = updatedArtwork.currentLocation;
     artwork.preview = updatedArtwork.preview;
@@ -81,7 +91,7 @@ export class ArtworkMappingService {
     const artworkToGet = new GetArtWorkDto();
 
     artworkToGet.id = artwork.id;
-    artworkToGet.classificationTerm = artwork.classificationTerm;
+    artworkToGet.classificationTerm = this.referenceMappingService.mapToOption(await artwork.classificationTerm);
     artworkToGet.title = artwork.title;
     artworkToGet.dimensions = artwork.dimensions;
     artworkToGet.materialsAndTechniquesDescription = artwork.materialsAndTechniquesDescription;
