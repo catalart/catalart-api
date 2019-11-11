@@ -32,10 +32,20 @@ import { ArtCollectionRepository } from '@dal/repositories/art-collection.reposi
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from '@api/interceptors/transform.interceptor';
 import { ReferenceMappingService } from '@business/services/maps/reference-mapping.service';
-import { ClassificationTermService } from '@business/services/reference/classification-term.service';
-import { ClassificationTermRepository } from '@dal/repositories/classification-term.repository';
-import { ClassificationTerm } from '@dal/entity/reference/classification-term.entity';
-import { ClassificationTermReferenceController } from '@api/reference/classification-term-reference.controller';
+import { GenreReferenceService } from '@business/services/reference/genre-reference.service';
+import { GenreRepository } from '@dal/repositories/genre.repository';
+import { Genre } from '@dal/entity/reference/genre.entity';
+import { GenreReferenceController } from '@api/reference/genre-reference.controller';
+import { ArtInstitutionService } from '@business/services/art-institution.service';
+import { ArtMovementService } from '@business/services/art-movement.service';
+import { ArtInstitutionReferenceService } from '@business/services/reference/art-institution-reference.service';
+import { ArtMovementReferenceService } from '@business/services/reference/art-movement-reference.service';
+import { ArtInstitution } from '@dal/entity/reference/art-institution.entity';
+import { ArtMovement } from '@dal/entity/reference/art-movement.entity';
+import { ArtInstitutionRepository } from '@dal/repositories/art-institution.repository';
+import { ArtMovementRepository } from '@dal/repositories/art-movement.repository';
+import { ArtInstitutionReferenceController } from '@api/reference/art-institution-reference.controller';
+import { ArtMovementReferenceController } from '@api/reference/art-movement-reference.controller';
 
 @Module({
   imports: [
@@ -46,11 +56,15 @@ import { ClassificationTermReferenceController } from '@api/reference/classifica
       ArtCollection,
       Artist,
       Tag,
-      ClassificationTerm,
+      Genre,
+      ArtInstitution,
+      ArtMovement,
       ArtworkRepository,
       ArtistRepository,
       ArtCollectionRepository,
-      ClassificationTermRepository
+      GenreRepository,
+      ArtInstitutionRepository,
+      ArtMovementRepository
     ]),
     PassportModule.register({ defaultStrategy: 'bearer' })
   ],
@@ -61,7 +75,9 @@ import { ClassificationTermReferenceController } from '@api/reference/classifica
     ArtistController,
     ArtistReferenceController,
     ArtworkReferenceController,
-    ClassificationTermReferenceController
+    GenreReferenceController,
+    ArtInstitutionReferenceController,
+    ArtMovementReferenceController
   ],
   providers: [
     {
@@ -80,7 +96,11 @@ import { ClassificationTermReferenceController } from '@api/reference/classifica
     TagMappingService,
     ArtCollectionMappingService,
     ReferenceMappingService,
-    ClassificationTermService
+    GenreReferenceService,
+    ArtInstitutionService,
+    ArtMovementService,
+    ArtInstitutionReferenceService,
+    ArtMovementReferenceService
   ]
 })
 export class AppModule {}

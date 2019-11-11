@@ -9,6 +9,7 @@ import { Option } from '@business/models/option.model';
 import { ArtistQuery } from '@api/queries/artist.query';
 import { ArtistRepository } from '@dal/repositories/artist.repository';
 import { ListResponse } from '@business/models/list-response.model';
+import { GetArtistDto } from '@business/models/artist/get-artist.dto';
 
 @Injectable()
 export class ArtistService {
@@ -23,11 +24,11 @@ export class ArtistService {
     return this.artistMappingService.mapToArtistDto(artist);
   }
 
-  async getAllArtists(query: ArtistQuery): Promise<ListResponse<ArtistDto>> {
+  async getAllArtists(query: ArtistQuery): Promise<ListResponse<GetArtistDto>> {
     const artists = await this.artistRepository.search(query);
     const totalNumberOfArtists = await this.artistRepository.count();
     const artistList = this.artistMappingService.mapToArtistsDto(artists);
-    const response = new ListResponse<ArtistDto>(artistList, totalNumberOfArtists);
+    const response = new ListResponse<GetArtistDto>(artistList, totalNumberOfArtists);
     return Promise.resolve(response);
   }
 
@@ -42,7 +43,7 @@ export class ArtistService {
   }
 
   async updateArtist(updatedArtist: ArtistDto): Promise<Artist> {
-    const originalArtist = await this.artistRepository.findOneOrFail(updatedArtist.id);
+    const originalArtist = await this.artistRepository.findOneOrFail(updatedArtist.id, { relations: ['artMovements', 'artInstitutions'] });
     const artist = this.artistMappingService.mapFromUpdatedArtist(updatedArtist, originalArtist);
     return this.artistRepository.save(artist);
   }

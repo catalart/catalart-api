@@ -27,7 +27,7 @@ export class ArtworkMappingService {
   async mapFromCreatedArtwork(createdArtwork: CreateArtworkDto): Promise<Artwork> {
     const artwork = new Artwork();
 
-    artwork.classificationTermId = createdArtwork.classificationTerm.id;
+    artwork.genreId = createdArtwork.classificationTerm.id;
     artwork.title = createdArtwork.title;
     artwork.dimensions = createdArtwork.dimensions;
     artwork.materialsAndTechniquesDescription = createdArtwork.materialsAndTechniquesDescription;
@@ -48,7 +48,7 @@ export class ArtworkMappingService {
   }
 
   async mapFromUpdatedArtwork(updatedArtwork: UpdateArtworkDto, artwork: Artwork): Promise<Artwork> {
-    artwork.classificationTermId = updatedArtwork.classificationTerm.id;
+    artwork.genreId = updatedArtwork.classificationTerm.id;
     artwork.title = updatedArtwork.title;
     artwork.dimensions = updatedArtwork.dimensions;
     artwork.materialsAndTechniquesDescription = updatedArtwork.materialsAndTechniquesDescription;
@@ -91,14 +91,14 @@ export class ArtworkMappingService {
     const artworkToGet = new GetArtWorkDto();
 
     artworkToGet.id = artwork.id;
-    artworkToGet.classificationTerm = this.referenceMappingService.mapToOption(await artwork.classificationTerm);
+    artworkToGet.classificationTerm = this.referenceMappingService.mapToOption(await artwork.genre);
     artworkToGet.title = artwork.title;
     artworkToGet.dimensions = artwork.dimensions;
     artworkToGet.materialsAndTechniquesDescription = artwork.materialsAndTechniquesDescription;
     const tags = await artwork.generalSubjectTerms;
     artworkToGet.generalSubjectTerms = this.tagMappingService.mapTagsToStrings(tags);
     const artist = await artwork.creator;
-    artworkToGet.creator = this.artistMappingService.mapToArtistDto(artist);
+    artworkToGet.creator = await this.artistMappingService.mapToArtistDto(artist);
     artworkToGet.creationDate = CreationDateDto.from(artwork.creationDate);
     artworkToGet.currentLocation = artwork.currentLocation;
     artworkToGet.preview = artwork.preview;

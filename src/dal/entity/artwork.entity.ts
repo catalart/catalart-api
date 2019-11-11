@@ -3,7 +3,7 @@ import { Tag } from './tag.entity';
 import { Artist } from './artist.entity';
 import { ArtCollection } from './art-collection.entity';
 import { Queryable } from '@dal/decorators/queryable.decorator';
-import { ClassificationTerm } from './reference/classification-term.entity';
+import { Genre } from './reference/genre.entity';
 
 @Entity()
 export class Artwork {
@@ -16,11 +16,11 @@ export class Artwork {
   title: string;
 
   @Column()
-  classificationTermId: number;
+  genreId: number;
 
-  @ManyToOne(type => ClassificationTerm)
-  @JoinColumn({ name: 'classificationTermId', referencedColumnName: 'id' })
-  classificationTerm: Promise<ClassificationTerm>;
+  @ManyToOne(type => Genre)
+  @JoinColumn({ name: 'genreId', referencedColumnName: 'id' })
+  genre: Promise<Genre>;
 
   @Column()
   dimensions: string;

@@ -4,13 +4,14 @@ import { ArtistDto } from '../business/models/artist/artist.dto';
 import { ArtistService } from '../business/services/artist.service';
 import { ArtistQuery } from './queries/artist.query';
 import { ListResponse } from '@business/models/list-response.model';
+import { GetArtistDto } from '@business/models/artist/get-artist.dto';
 
 @Controller('artists')
 export class ArtistController {
   constructor(private artistService: ArtistService) {}
 
   @Get()
-  getAllArtists(@Query() query: ArtistQuery): Promise<ListResponse<ArtistDto>> {
+  getAllArtists(@Query() query: ArtistQuery): Promise<ListResponse<GetArtistDto>> {
     return this.artistService.getAllArtists(query);
   }
 

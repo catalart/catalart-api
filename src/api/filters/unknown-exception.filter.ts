@@ -2,7 +2,7 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from
 
 @Catch()
 export class UnknownExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
@@ -13,7 +13,8 @@ export class UnknownExceptionFilter implements ExceptionFilter {
       statusCode: status,
       error: 'An unknown exception exception has occured. Please try again later.',
       success: false,
-      path: request.url
+      path: request.url,
+      stacktrace: exception.stack
     });
   }
 }

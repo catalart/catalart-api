@@ -4,7 +4,7 @@ import { Artwork } from '../artwork.entity';
 import { ReferenceEntity } from './reference-entity.interface';
 
 @Entity()
-export class ClassificationTerm implements ReferenceEntity {
+export class Genre implements ReferenceEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,6 +19,6 @@ export class ClassificationTerm implements ReferenceEntity {
   @Column()
   description: string;
 
-  @OneToMany(type => Artwork, artwork => artwork.classificationTerm)
+  @OneToMany(type => Artwork, artwork => artwork.genre)
   artwork: Promise<Artwork[]>;
 }

@@ -9,7 +9,9 @@ export class Tag {
   @Column()
   tag: string;
 
-  @ManyToMany(type => Artwork, artwork => artwork.generalSubjectTerms)
+  @ManyToMany(type => Artwork, artwork => artwork.generalSubjectTerms, {
+    cascade: ['insert']
+  })
   @JoinTable()
   artwork: Promise<Artwork[]>;
 }
