@@ -14,13 +14,13 @@ A simple API that powers the catalog
 - Generating a migration
 
 ```bash
-  npm run typeorm-generate AddArtworkAndArtCollections
+  npm run migration:generate AddArtworkAndArtCollections
 ```
 
 - Applying migrations
 
 ```bash
-npm run typeorm-run
+npm run migration:run
 ```
 
 ## Elasticsearch

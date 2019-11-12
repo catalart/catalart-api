@@ -1,17 +1,19 @@
 import { ArtistDto } from '../artist/artist.dto';
-import { CreationDateDto } from '../creation-date.dto';
 import { Option } from '../option.model';
+import { DateAndPlaceDto } from '../date-and-place.dto';
+import { PreviewDto } from '../preview.dto';
 
-export class GetArtWorkDto {
+export class ArtworkDto {
   id: number;
-  classificationTerm: Option;
   title: string;
   creator: ArtistDto;
-  creationDate: CreationDateDto;
+  creationDate: DateAndPlaceDto;
   dimensions: string;
+  genre: Option;
+  style: Option;
   materialsAndTechniquesDescription: string;
   generalSubjectTerms: string[];
   currentLocation: string;
-  preview: string; // url
+  preview: PreviewDto;
   citation: string;
 }

@@ -3,7 +3,8 @@ import { Tag } from './tag.entity';
 import { Artist } from './artist.entity';
 import { ArtCollection } from './art-collection.entity';
 import { Queryable } from '@dal/decorators/queryable.decorator';
-import { Genre } from './reference/genre.entity';
+import { ArtworkGenre } from './reference/artwork-genre.entity';
+import { ArtworkStyle } from './reference/artwork-style.entity';
 
 @Entity()
 export class Artwork {
@@ -18,9 +19,16 @@ export class Artwork {
   @Column()
   genreId: number;
 
-  @ManyToOne(type => Genre)
+  @ManyToOne(type => ArtworkGenre)
   @JoinColumn({ name: 'genreId', referencedColumnName: 'id' })
-  genre: Promise<Genre>;
+  genre: Promise<ArtworkGenre>;
+
+  @Column()
+  styleId: number;
+
+  @ManyToOne(type => ArtworkStyle)
+  @JoinColumn({ name: 'styleId', referencedColumnName: 'id' })
+  style: Promise<ArtworkStyle>;
 
   @Column()
   dimensions: string;
@@ -28,7 +36,7 @@ export class Artwork {
   @Column()
   materialsAndTechniquesDescription: string;
 
-  @ManyToMany(type => Tag, tag => tag.artwork, { cascade: true })
+  @ManyToMany(type => Tag, tag => tag.artwork, { cascade: ['insert', 'update', 'remove'] })
   generalSubjectTerms: Promise<Tag[]>;
 
   @Column()
@@ -38,8 +46,26 @@ export class Artwork {
   @JoinColumn({ name: 'creatorId', referencedColumnName: 'id' })
   creator: Promise<Artist>;
 
-  @Column()
-  creationDate: string;
+  @Column({ default: false })
+  isCreationDateKnown: boolean = false;
+
+  @Column({ nullable: true })
+  isCreationDateWithinARange: boolean;
+
+  @Column({ nullable: true })
+  earliestKnownCreationDateYear: number;
+
+  @Column({ nullable: true })
+  latestKnownCreationDateYear: number;
+
+  @Column({ nullable: true })
+  exactCreationDateYear: number;
+
+  @Column({ default: false })
+  isCreationPlaceKnown: boolean = false;
+
+  @Column({ nullable: true })
+  creationPlaceLocation: string;
 
   @Column()
   currentLocation: string;

@@ -13,7 +13,6 @@ import { ArtworkService } from './business/services/artwork.service';
 import { AuthService } from './business/services/auth.service';
 import { HttpStrategy } from './business/services/http.strategy';
 import { UserService } from './business/services/user.service';
-import { TagService } from './business/services/tag.service';
 import { ArtistService } from './business/services/artist.service';
 import { ArtCollectionService } from './business/services/art-collection.service';
 import { ArtistMappingService } from './business/services/maps/artist-mapping.service';
@@ -32,10 +31,10 @@ import { ArtCollectionRepository } from '@dal/repositories/art-collection.reposi
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from '@api/interceptors/transform.interceptor';
 import { ReferenceMappingService } from '@business/services/maps/reference-mapping.service';
-import { GenreReferenceService } from '@business/services/reference/genre-reference.service';
-import { GenreRepository } from '@dal/repositories/genre.repository';
-import { Genre } from '@dal/entity/reference/genre.entity';
-import { GenreReferenceController } from '@api/reference/genre-reference.controller';
+import { ArtworkGenreReferenceService } from '@business/services/reference/artwork-genre-reference.service';
+import { ArtworkGenreRepository } from '@dal/repositories/artwork-genre.repository';
+import { ArtworkGenre } from '@dal/entity/reference/artwork-genre.entity';
+import { ArtworkGenreReferenceController } from '@api/reference/artwork-genre-reference.controller';
 import { ArtInstitutionService } from '@business/services/art-institution.service';
 import { ArtMovementService } from '@business/services/art-movement.service';
 import { ArtInstitutionReferenceService } from '@business/services/reference/art-institution-reference.service';
@@ -46,6 +45,10 @@ import { ArtInstitutionRepository } from '@dal/repositories/art-institution.repo
 import { ArtMovementRepository } from '@dal/repositories/art-movement.repository';
 import { ArtInstitutionReferenceController } from '@api/reference/art-institution-reference.controller';
 import { ArtMovementReferenceController } from '@api/reference/art-movement-reference.controller';
+import { ArtworkStyle } from '@dal/entity/reference/artwork-style.entity';
+import { ArtworkStyleRepository } from '@dal/repositories/artwork-style.repository';
+import { ArtworkStyleReferenceController } from '@api/reference/artwork-style-reference.controller';
+import { ArtworkStyleReferenceService } from '@business/services/reference/artwork-style-reference.service';
 
 @Module({
   imports: [
@@ -56,13 +59,15 @@ import { ArtMovementReferenceController } from '@api/reference/art-movement-refe
       ArtCollection,
       Artist,
       Tag,
-      Genre,
+      ArtworkGenre,
+      ArtworkStyle,
       ArtInstitution,
       ArtMovement,
       ArtworkRepository,
       ArtistRepository,
       ArtCollectionRepository,
-      GenreRepository,
+      ArtworkGenreRepository,
+      ArtworkStyleRepository,
       ArtInstitutionRepository,
       ArtMovementRepository
     ]),
@@ -75,7 +80,8 @@ import { ArtMovementReferenceController } from '@api/reference/art-movement-refe
     ArtistController,
     ArtistReferenceController,
     ArtworkReferenceController,
-    GenreReferenceController,
+    ArtworkGenreReferenceController,
+    ArtworkStyleReferenceController,
     ArtInstitutionReferenceController,
     ArtMovementReferenceController
   ],
@@ -89,18 +95,18 @@ import { ArtMovementReferenceController } from '@api/reference/art-movement-refe
     HttpStrategy,
     UserService,
     ArtistService,
-    TagService,
     ArtCollectionService,
     ArtistMappingService,
     ArtworkMappingService,
     TagMappingService,
     ArtCollectionMappingService,
     ReferenceMappingService,
-    GenreReferenceService,
+    ArtworkGenreReferenceService,
     ArtInstitutionService,
     ArtMovementService,
     ArtInstitutionReferenceService,
-    ArtMovementReferenceService
+    ArtMovementReferenceService,
+    ArtworkStyleReferenceService
   ]
 })
 export class AppModule {}
