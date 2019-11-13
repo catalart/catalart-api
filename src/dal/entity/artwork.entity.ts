@@ -34,7 +34,7 @@ export class Artwork {
   dimensions: string;
 
   @Column()
-  materialsAndTechniquesDescription: string;
+  medium: string;
 
   @ManyToMany(type => Tag, tag => tag.artwork, { cascade: ['insert', 'update', 'remove'] })
   generalSubjectTerms: Promise<Tag[]>;

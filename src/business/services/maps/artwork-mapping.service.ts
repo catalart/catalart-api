@@ -27,7 +27,7 @@ export class ArtworkMappingService {
     artwork.styleId = createdArtwork.style.id;
     artwork.title = createdArtwork.title;
     artwork.dimensions = createdArtwork.dimensions;
-    artwork.materialsAndTechniquesDescription = createdArtwork.materialsAndTechniquesDescription;
+    artwork.medium = createdArtwork.medium;
     const tags = createdArtwork.generalSubjectTerms.map(term => Object.assign(new Tag(), { tag: term }));
     artwork.generalSubjectTerms = Promise.resolve(tags);
     if (!!createdArtwork.creator.id) {
@@ -63,7 +63,7 @@ export class ArtworkMappingService {
     artwork.styleId = updatedArtwork.style.id;
     artwork.title = updatedArtwork.title;
     artwork.dimensions = updatedArtwork.dimensions;
-    artwork.materialsAndTechniquesDescription = updatedArtwork.materialsAndTechniquesDescription;
+    artwork.medium = updatedArtwork.medium;
     const tags = updatedArtwork.generalSubjectTerms.map(term => Object.assign(new Tag(), { tag: term }));
     artwork.generalSubjectTerms = Promise.resolve(tags);
     if (!!updatedArtwork.creator.id) {
@@ -119,7 +119,7 @@ export class ArtworkMappingService {
     artworkDto.style = this.referenceMappingService.mapToOption(await artwork.style);
     artworkDto.title = artwork.title;
     artworkDto.dimensions = artwork.dimensions;
-    artworkDto.materialsAndTechniquesDescription = artwork.materialsAndTechniquesDescription;
+    artworkDto.medium = artwork.medium;
     const tags = await artwork.generalSubjectTerms;
     artworkDto.generalSubjectTerms = this.tagMappingService.mapTagsToStrings(tags);
     const artist = await artwork.creator;

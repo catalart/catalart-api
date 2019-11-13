@@ -11,7 +11,7 @@ export class ArtworkDto {
   dimensions: string;
   genre: Option;
   style: Option;
-  materialsAndTechniquesDescription: string;
+  medium: string;
   generalSubjectTerms: string[];
   currentLocation: string;
   preview: PreviewDto;
