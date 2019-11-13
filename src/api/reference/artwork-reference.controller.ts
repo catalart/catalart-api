@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 
 import { Option } from '@business/models/option.model';
 import { ArtworkQuery } from '@api/queries/artwork.query';
@@ -9,7 +9,7 @@ export class ArtworkReferenceController {
   constructor(private artworkService: ArtworkService) {}
 
   @Get()
-  getAllArtists(query: ArtworkQuery): Promise<Option[]> {
+  getAllArtists(@Query() query: ArtworkQuery): Promise<Option[]> {
     return this.artworkService.getAllArtworkAsOptions(query);
   }
 }

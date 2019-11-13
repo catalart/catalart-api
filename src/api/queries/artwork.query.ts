@@ -8,9 +8,7 @@ export class ArtworkQuery extends ApiQuery<Artwork> {
   determineQueryFilters(): FindConditions<Artwork> {
     const query: any = {};
     if (!!this.artistId) {
-      query.creator = {
-        id: this.artistId
-      };
+      query.creatorId = this.artistId;
     }
 
     return query;

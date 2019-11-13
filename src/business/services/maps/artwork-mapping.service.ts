@@ -1,58 +1,80 @@
 import { Injectable } from '@nestjs/common';
 
 import { ArtistService } from '../artist.service';
-import { TagService } from '../tag.service';
 
-import { CreateArtworkDto } from '@business/models/artwork/create-artwork.dto';
+import { ArtworkDto } from '@business/models/artwork/artwork.dto';
 import { Artwork } from '@dal/entity/artwork.entity';
-import { UpdateArtworkDto } from '@business/models/artwork/update-artwork.dto';
-import { CreationDateDto } from '@business/models/creation-date.dto';
 import { ListArtworkDto } from '@business/models/artwork/list-artwork.dto';
-import { GetArtWorkDto } from '@business/models/artwork/get-artwork.dto';
 import { TagMappingService } from './tag-mapping.service';
 import { ArtistMappingService } from './artist-mapping.service';
 import { Option } from '@business/models/option.model';
+import { ReferenceMappingService } from './reference-mapping.service';
+import { Tag } from '@dal/entity/tag.entity';
 
 @Injectable()
 export class ArtworkMappingService {
   constructor(
-    private readonly tagService: TagService,
     private readonly artistService: ArtistService,
     private readonly tagMappingService: TagMappingService,
-    private readonly artistMappingService: ArtistMappingService
+    private readonly artistMappingService: ArtistMappingService,
+    private readonly referenceMappingService: ReferenceMappingService
   ) {}
 
-  async mapFromCreatedArtwork(createdArtwork: CreateArtworkDto): Promise<Artwork> {
+  async mapFromCreatedArtwork(createdArtwork: ArtworkDto): Promise<Artwork> {
     const artwork = new Artwork();
 
-    artwork.classificationTerm = createdArtwork.classificationTerm;
+    artwork.genreId = createdArtwork.genre.id;
+    artwork.styleId = createdArtwork.style.id;
     artwork.title = createdArtwork.title;
     artwork.dimensions = createdArtwork.dimensions;
-    artwork.materialsAndTechniquesDescription = createdArtwork.materialsAndTechniquesDescription;
-    const tags = await this.tagService.addTags(createdArtwork.generalSubjectTerms);
+    artwork.medium = createdArtwork.medium;
+    const tags = createdArtwork.generalSubjectTerms.map(term => Object.assign(new Tag(), { tag: term }));
     artwork.generalSubjectTerms = Promise.resolve(tags);
-    const artist = await this.artistService.getOrCreateArtist(createdArtwork.creator);
-    artwork.creator = Promise.resolve(artist);
-    artwork.creationDate = CreationDateDto.to(createdArtwork.creationDate);
+    if (!!createdArtwork.creator.id) {
+      artwork.creatorId = createdArtwork.creator.id;
+    } else {
+      const artist = await this.artistService.addArtist(createdArtwork.creator);
+      artwork.creatorId = artist.id;
+    }
+    this.setCreationDateAndPlace(artwork, createdArtwork);
     artwork.currentLocation = createdArtwork.currentLocation;
-    artwork.preview = createdArtwork.preview;
+    artwork.preview = createdArtwork.preview ? createdArtwork.preview.url : '';
     artwork.citation = createdArtwork.citation;
 
     return Promise.resolve(artwork);
   }
 
-  async mapFromUpdatedArtwork(updatedArtwork: UpdateArtworkDto, artwork: Artwork): Promise<Artwork> {
-    artwork.classificationTerm = updatedArtwork.classificationTerm;
+  private setCreationDateAndPlace(artwork: Artwork, artworkDto: ArtworkDto) {
+    if (artworkDto.creationDate && artworkDto.creationDate.date) {
+      artwork.isCreationDateKnown = artworkDto.creationDate.date.isDateKnown;
+      artwork.isCreationDateWithinARange = artworkDto.creationDate.date.isWithinARange;
+      artwork.earliestKnownCreationDateYear = artworkDto.creationDate.date.startYear;
+      artwork.latestKnownCreationDateYear = artworkDto.creationDate.date.endYear;
+      artwork.exactCreationDateYear = artworkDto.creationDate.date.exactYear;
+    }
+    if (artworkDto.creationDate && artworkDto.creationDate.place) {
+      artwork.isCreationPlaceKnown = artworkDto.creationDate.place.isPlaceKnown;
+      artwork.creationPlaceLocation = artworkDto.creationDate.place.location;
+    }
+  }
+
+  async mapFromUpdatedArtwork(updatedArtwork: ArtworkDto, artwork: Artwork): Promise<Artwork> {
+    artwork.genreId = updatedArtwork.genre.id;
+    artwork.styleId = updatedArtwork.style.id;
     artwork.title = updatedArtwork.title;
     artwork.dimensions = updatedArtwork.dimensions;
-    artwork.materialsAndTechniquesDescription = updatedArtwork.materialsAndTechniquesDescription;
-    const tags = await this.tagService.updateTags(updatedArtwork.id, updatedArtwork.generalSubjectTerms);
+    artwork.medium = updatedArtwork.medium;
+    const tags = updatedArtwork.generalSubjectTerms.map(term => Object.assign(new Tag(), { tag: term }));
     artwork.generalSubjectTerms = Promise.resolve(tags);
-    const artist = await this.artistService.getOrCreateArtist(updatedArtwork.creator);
-    artwork.creator = Promise.resolve(artist);
-    artwork.creationDate = CreationDateDto.to(updatedArtwork.creationDate);
+    if (!!updatedArtwork.creator.id) {
+      artwork.creatorId = updatedArtwork.creator.id;
+    } else {
+      const artist = await this.artistService.addArtist(updatedArtwork.creator);
+      artwork.creatorId = artist.id;
+    }
+    this.setCreationDateAndPlace(artwork, updatedArtwork);
     artwork.currentLocation = updatedArtwork.currentLocation;
-    artwork.preview = updatedArtwork.preview;
+    artwork.preview = updatedArtwork.preview ? updatedArtwork.preview.url : '';
     artwork.citation = updatedArtwork.citation;
 
     return Promise.resolve(artwork);
@@ -65,7 +87,7 @@ export class ArtworkMappingService {
         return Object.assign(new ListArtworkDto(), {
           id: artwork.id,
           title: artwork.title,
-          creationDate: artwork.creationDate,
+          creationDate: this.formatCreationDate(artwork),
           creatorIdentity: artist.name,
           preview: artwork.preview
         });
@@ -73,27 +95,56 @@ export class ArtworkMappingService {
     );
   }
 
+  private formatCreationDate(artwork: Artwork): string {
+    if (artwork.isCreationDateKnown) {
+      if (artwork.isCreationDateWithinARange) {
+        return `${artwork.earliestKnownCreationDateYear}-${artwork.latestKnownCreationDateYear}`;
+      } else {
+        return `${artwork.exactCreationDateYear}`;
+      }
+    } else {
+      return 'n.d.';
+    }
+  }
+
   mapFromArtworkToOptions(artworkList: Artwork[]): Promise<Option[]> {
     return Promise.all(artworkList.map((artwork: Artwork) => new Option(artwork.id, artwork.title)));
   }
 
-  async mapToGetArtwork(artwork: Artwork): Promise<GetArtWorkDto> {
-    const artworkToGet = new GetArtWorkDto();
+  async mapToGetArtwork(artwork: Artwork): Promise<ArtworkDto> {
+    const artworkDto = new ArtworkDto();
 
-    artworkToGet.id = artwork.id;
-    artworkToGet.classificationTerm = artwork.classificationTerm;
-    artworkToGet.title = artwork.title;
-    artworkToGet.dimensions = artwork.dimensions;
-    artworkToGet.materialsAndTechniquesDescription = artwork.materialsAndTechniquesDescription;
+    artworkDto.id = artwork.id;
+    artworkDto.genre = this.referenceMappingService.mapToOption(await artwork.genre);
+    artworkDto.style = this.referenceMappingService.mapToOption(await artwork.style);
+    artworkDto.title = artwork.title;
+    artworkDto.dimensions = artwork.dimensions;
+    artworkDto.medium = artwork.medium;
     const tags = await artwork.generalSubjectTerms;
-    artworkToGet.generalSubjectTerms = this.tagMappingService.mapTagsToStrings(tags);
+    artworkDto.generalSubjectTerms = this.tagMappingService.mapTagsToStrings(tags);
     const artist = await artwork.creator;
-    artworkToGet.creator = this.artistMappingService.mapToArtistDto(artist);
-    artworkToGet.creationDate = CreationDateDto.from(artwork.creationDate);
-    artworkToGet.currentLocation = artwork.currentLocation;
-    artworkToGet.preview = artwork.preview;
-    artworkToGet.citation = artwork.citation;
+    artworkDto.creator = await this.artistMappingService.mapToArtistDto(artist);
+    this.mapCreationDateAndPlace(artworkDto, artwork);
+    artworkDto.currentLocation = artwork.currentLocation;
+    artworkDto.preview = { url: artwork.preview };
+    artworkDto.citation = artwork.citation;
 
-    return Promise.resolve(artworkToGet);
+    return Promise.resolve(artworkDto);
+  }
+
+  private mapCreationDateAndPlace(artworkDto: ArtworkDto, artwork: Artwork): void {
+    artworkDto.creationDate = {
+      date: {
+        isDateKnown: artwork.isCreationDateKnown,
+        isWithinARange: artwork.isCreationDateWithinARange,
+        startYear: artwork.earliestKnownCreationDateYear,
+        endYear: artwork.latestKnownCreationDateYear,
+        exactYear: artwork.exactCreationDateYear
+      },
+      place: {
+        isPlaceKnown: artwork.isCreationPlaceKnown,
+        location: artwork.creationPlaceLocation
+      }
+    };
   }
 }
