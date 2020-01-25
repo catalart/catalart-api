@@ -87,10 +87,10 @@ export class ArtistMappingService {
     artist.nationality = createdArtist.nationality;
     this.setBirthDateAndPlace(artist, createdArtist);
     this.setDeathDateAndPlace(artist, createdArtist);
-    if (createdArtist.artInstitutions.length > 0) {
+    if (createdArtist.artInstitutions?.length > 0) {
       artist.artInstitutions = this.artInstitutionService.findInstitutionsByIds(createdArtist.artInstitutions);
     }
-    if (createdArtist.artMovements.length > 0) {
+    if (createdArtist.artMovements?.length > 0) {
       artist.artMovements = this.artMovementService.findArtMovementsByIds(createdArtist.artMovements);
     }
 

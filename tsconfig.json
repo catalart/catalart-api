@@ -10,7 +10,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
-    "target": "esnext",
+    "incremental": true,
+    "declaration": true,
+    "target": "es2020",
     "types": ["node"],
     "paths": {
       "*": ["node_modules/*"],

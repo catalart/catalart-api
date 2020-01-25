@@ -44,7 +44,7 @@ export class ArtCollectionMappingService {
     artCollection.type = createdArtCollection.type;
     artCollection.description = createdArtCollection.description;
     artCollection.location = createdArtCollection.location;
-    if ((createdArtCollection.artwork || []).length > 0) {
+    if (createdArtCollection.artwork?.length > 0) {
       const artwork = this.artworkService.getArtworkByIds(createdArtCollection.artwork.map(a => a.id));
       artCollection.artwork = artwork;
     }
@@ -60,7 +60,7 @@ export class ArtCollectionMappingService {
     existingArtCollection.type = updatedArtCollection.type;
     existingArtCollection.description = updatedArtCollection.description;
     existingArtCollection.location = updatedArtCollection.location;
-    if ((updatedArtCollection.artwork || []).length > 0) {
+    if (updatedArtCollection.artwork?.length > 0) {
       const artwork = this.artworkService.getArtworkByIds(updatedArtCollection.artwork.map(a => a.id));
       existingArtCollection.artwork = artwork;
     } else {
