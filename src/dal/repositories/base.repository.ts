@@ -46,6 +46,6 @@ export class BaseRepository<T> extends Repository<T> {
   }
 
   private isDefinedFindCondition(findCondition: FindConditions<T>): boolean {
-    return !!findCondition && Object.keys(findCondition).length > 0;
+    return !!findCondition && Object.keys(findCondition)?.length > 0;
   }
 }
