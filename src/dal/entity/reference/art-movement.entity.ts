@@ -16,7 +16,7 @@ export class ArtMovement implements ReferenceEntity {
   @Column()
   label: string;
 
-  @Column()
+  @Column({ length: 1000 })
   description: string;
 
   @ManyToMany(type => Artist, artist => artist.artMovements)

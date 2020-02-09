@@ -11,6 +11,6 @@ export class ArtInstitutionReferenceController {
 
   @Get()
   getAllArtMovements(@Query() query: ReferenceQuery<ArtInstitution>): Promise<Option[]> {
-    return this.artInstitutionService.getAll(query);
+    return this.artInstitutionService.getAllAsOptions(query);
   }
 }

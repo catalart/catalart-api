@@ -11,6 +11,6 @@ export class ArtworkStyleReferenceController {
 
   @Get()
   getAllStyles(@Query() query: ReferenceQuery<ArtworkStyle>): Promise<Option[]> {
-    return this.genreService.getAll(query);
+    return this.genreService.getAllAsOptions(query);
   }
 }
