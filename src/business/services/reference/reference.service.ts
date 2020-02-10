@@ -8,7 +8,7 @@ export interface ReferenceService<T> {
   getAllAsOptions(query: ApiQuery<T>): Promise<Option[]>;
   getAllAsItems(query: ApiQuery<T>): Promise<ListResponse<ReferenceEntity>>;
   addItem(item: T): Promise<T>;
-  updateItem(itemId: number, item: T): Promise<UpdateResult>;
-  deleteItem(itemId: number): Promise<DeleteResult>;
+  updateItem(itemId: number, item: T): Promise<T>;
+  deleteItem(itemId: number): Promise<T[]>;
   getItem(itemId: number): Promise<T>;
 }

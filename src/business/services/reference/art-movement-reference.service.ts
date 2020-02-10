@@ -31,18 +31,26 @@ export class ArtMovementReferenceService implements ReferenceService<ArtMovement
   }
 
   getItem(itemId: number): Promise<ArtMovement> {
-    return this.artMovementRepository.findOneOrFail(itemId);
+    return this.artMovementRepository.findByIdOrFail(itemId);
   }
 
   async addItem(item: ArtMovement): Promise<ArtMovement> {
     return this.artMovementRepository.save(item);
   }
 
-  updateItem(itemId: number, item: ArtMovement): Promise<UpdateResult> {
-    return this.artMovementRepository.update({ id: itemId }, item);
+  async updateItem(itemId: number, item: ArtMovement): Promise<ArtMovement> {
+    const dbItem = await this.getItem(itemId);
+    const updatedItem = {
+      ...dbItem,
+      name: item.name,
+      description: item.description,
+      label: item.label
+    };
+    return this.artMovementRepository.save(updatedItem);
   }
 
-  deleteItem(itemId: number): Promise<DeleteResult> {
-    return this.artMovementRepository.delete({ id: itemId });
+  async deleteItem(itemId: number): Promise<ArtMovement[]> {
+    const dbItem = await this.getItem(itemId);
+    return this.artMovementRepository.remove([dbItem]);
   }
 }

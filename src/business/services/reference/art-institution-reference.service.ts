@@ -31,18 +31,26 @@ export class ArtInstitutionReferenceService implements ReferenceService<ArtInsti
   }
 
   getItem(itemId: number): Promise<ArtInstitution> {
-    return this.artInstitutionRepository.findOneOrFail(itemId);
+    return this.artInstitutionRepository.findByIdOrFail(itemId);
   }
 
   async addItem(item: ArtInstitution): Promise<ArtInstitution> {
     return this.artInstitutionRepository.save(item);
   }
 
-  updateItem(itemId: number, item: ArtInstitution): Promise<UpdateResult> {
-    return this.artInstitutionRepository.update({ id: itemId }, item);
+  async updateItem(itemId: number, item: ArtInstitution): Promise<ArtInstitution> {
+    const dbItem = await this.getItem(itemId);
+    const updatedItem = {
+      ...dbItem,
+      name: item.name,
+      description: item.description,
+      label: item.label
+    };
+    return this.artInstitutionRepository.save(updatedItem);
   }
 
-  deleteItem(itemId: number): Promise<DeleteResult> {
-    return this.artInstitutionRepository.delete({ id: itemId });
+  async deleteItem(itemId: number): Promise<ArtInstitution[]> {
+    const dbItem = await this.getItem(itemId);
+    return this.artInstitutionRepository.remove([dbItem]);
   }
 }

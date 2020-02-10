@@ -31,18 +31,26 @@ export class ArtworkStyleReferenceService implements ReferenceService<ArtworkSty
   }
 
   getItem(itemId: number): Promise<ArtworkStyle> {
-    return this.artworkStyleRepository.findOneOrFail(itemId);
+    return this.artworkStyleRepository.findByIdOrFail(itemId);
   }
 
   async addItem(item: ArtworkStyle): Promise<ArtworkStyle> {
     return this.artworkStyleRepository.save(item);
   }
 
-  updateItem(itemId: number, item: ArtworkStyle): Promise<UpdateResult> {
-    return this.artworkStyleRepository.update({ id: itemId }, item);
+  async updateItem(itemId: number, item: ArtworkStyle): Promise<ArtworkStyle> {
+    const dbItem = await this.getItem(itemId);
+    const updatedItem = {
+      ...dbItem,
+      name: item.name,
+      description: item.description,
+      label: item.label
+    };
+    return this.artworkStyleRepository.save(updatedItem);
   }
 
-  deleteItem(itemId: number): Promise<DeleteResult> {
-    return this.artworkStyleRepository.delete({ id: itemId });
+  async deleteItem(itemId: number): Promise<ArtworkStyle[]> {
+    const dbItem = await this.getItem(itemId);
+    return this.artworkStyleRepository.remove([dbItem]);
   }
 }

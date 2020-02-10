@@ -29,7 +29,7 @@ export class ArtworkGenreReferenceService implements ReferenceService<ArtworkGen
   }
 
   getItem(itemId: number): Promise<ArtworkGenre> {
-    return this.genreRepository.findOneOrFail(itemId);
+    return this.genreRepository.findByIdOrFail(itemId);
   }
 
   addItem(item: ReferenceEntity): Promise<ArtworkGenre> {
@@ -40,11 +40,19 @@ export class ArtworkGenreReferenceService implements ReferenceService<ArtworkGen
     return this.genreRepository.save(newItem);
   }
 
-  updateItem(itemId: number, item: ReferenceEntity): Promise<UpdateResult> {
-    return this.genreRepository.update({ id: itemId }, item);
+  async updateItem(itemId: number, item: ReferenceEntity): Promise<ArtworkGenre> {
+    const dbItem = await this.getItem(itemId);
+    const updatedItem = {
+      ...dbItem,
+      name: item.name,
+      description: item.description,
+      label: item.label
+    };
+    return this.genreRepository.save(updatedItem);
   }
 
-  deleteItem(itemId: number): Promise<DeleteResult> {
-    return this.genreRepository.delete({ id: itemId });
+  async deleteItem(itemId: number): Promise<ArtworkGenre[]> {
+    const dbItem = await this.getItem(itemId);
+    return this.genreRepository.remove([dbItem]);
   }
 }

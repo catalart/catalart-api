@@ -31,7 +31,7 @@ export class ArtworkService {
   }
 
   async getArtworkById(id: number): Promise<ArtworkDto> {
-    const artwork = await this.artworkRepository.findOneOrFail(id, { relations: ['creator', 'generalSubjectTerms', 'style', 'genre'] });
+    const artwork = await this.artworkRepository.findByIdOrFail(id, { relations: ['creator', 'generalSubjectTerms', 'style', 'genre'] });
     return this.artistMappingService.mapToGetArtwork(artwork);
   }
 
@@ -41,13 +41,13 @@ export class ArtworkService {
   }
 
   async updateArtwork(updatedArtwork: ArtworkDto): Promise<Artwork> {
-    const originalArtwork = await this.artworkRepository.findOneOrFail(updatedArtwork.id);
+    const originalArtwork = await this.artworkRepository.findByIdOrFail(updatedArtwork.id);
     const artwork = await this.artistMappingService.mapFromUpdatedArtwork(updatedArtwork, originalArtwork);
     return this.artworkRepository.save(artwork);
   }
 
   async deleteArtwork(artworkId: number) {
-    const originalArtwork = await this.artworkRepository.findOneOrFail(artworkId, { relations: ['generalSubjectTerms'] });
+    const originalArtwork = await this.artworkRepository.findByIdOrFail(artworkId, { relations: ['generalSubjectTerms'] });
     return this.artworkRepository.remove(originalArtwork);
   }
 

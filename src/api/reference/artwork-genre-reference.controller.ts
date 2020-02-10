@@ -33,12 +33,12 @@ export class ArtworkGenreReferenceController {
   }
 
   @Put(':id')
-  updateGenre(@Param('id') genreId: number, @Body() genre: ReferenceEntity): Promise<UpdateResult> {
+  updateGenre(@Param('id') genreId: number, @Body() genre: ReferenceEntity): Promise<ArtworkGenre> {
     return this.genreService.updateItem(genreId, genre);
   }
 
   @Delete(':id')
-  deleteGenre(@Param('id') genreId: number): Promise<DeleteResult> {
+  deleteGenre(@Param('id') genreId: number): Promise<ArtworkGenre[]> {
     return this.genreService.deleteItem(genreId);
   }
 }
