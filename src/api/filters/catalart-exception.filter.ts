@@ -1,18 +1,23 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { CatalartException } from '@business/models/exceptions/catalart.exception';
 
-@Catch(CatalartException)
+@Catch()
 export class CatalartExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
+    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    let detailedError = 'An unknown exception exception has occured. Please try again later.';
+
+    if (exception instanceof CatalartException) {
+      detailedError = exception.message;
+    }
 
     response.status(status).json({
       statusCode: status,
-      error: exception.message,
+      error: detailedError,
       stacktrace: exception.stack,
       success: false,
       path: request.url

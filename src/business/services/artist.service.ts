@@ -20,7 +20,7 @@ export class ArtistService {
   ) {}
 
   async getArtistById(artistId: number): Promise<ArtistDto> {
-    const artist = await this.artistRepository.findOneOrFail(artistId);
+    const artist = await this.artistRepository.findByIdOrFail(artistId);
     return this.artistMappingService.mapToArtistDto(artist);
   }
 
@@ -43,13 +43,13 @@ export class ArtistService {
   }
 
   async updateArtist(updatedArtist: ArtistDto): Promise<Artist> {
-    const originalArtist = await this.artistRepository.findOneOrFail(updatedArtist.id, { relations: ['artMovements', 'artInstitutions'] });
+    const originalArtist = await this.artistRepository.findByIdOrFail(updatedArtist.id, { relations: ['artMovements', 'artInstitutions'] });
     const artist = this.artistMappingService.mapFromUpdatedArtist(updatedArtist, originalArtist);
     return this.artistRepository.save(artist);
   }
 
   async deleteArtist(artistId: number) {
-    const originalArtwork = await this.artistRepository.findOneOrFail(artistId);
+    const originalArtwork = await this.artistRepository.findByIdOrFail(artistId);
     return this.artistRepository.remove(originalArtwork);
   }
 }

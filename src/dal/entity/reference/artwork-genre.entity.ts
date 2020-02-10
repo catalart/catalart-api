@@ -16,7 +16,7 @@ export class ArtworkGenre implements ReferenceEntity {
   @Column()
   label: string;
 
-  @Column()
+  @Column({ length: 1000 })
   description: string;
 
   @OneToMany(type => Artwork, artwork => artwork.genre)

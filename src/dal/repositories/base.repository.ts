@@ -1,7 +1,8 @@
-import { Repository, FindManyOptions, Like, FindConditions } from 'typeorm';
+import { Repository, FindManyOptions, Like, FindConditions, ObjectID, FindOneOptions } from 'typeorm';
 import { ApiQuery } from '@api/queries/api.query';
 import { determineAllQueryableFields } from '@dal/decorators/queryable.decorator';
 import 'reflect-metadata';
+import { CatalartException } from '@business/models/exceptions/catalart.exception';
 
 export class BaseRepository<T> extends Repository<T> {
   searchWithFilter(type: new () => T, query: ApiQuery<T>, options?: FindManyOptions<T>): Promise<T[]> {
@@ -18,6 +19,12 @@ export class BaseRepository<T> extends Repository<T> {
       take: +query.limit,
       skip: +query.offset,
       where: filter
+    });
+  }
+
+  findByIdOrFail(id?: string | number | Date | ObjectID, options?: FindOneOptions<T>): Promise<T> {
+    return this.findOneOrFail(id, options).catch(() => {
+      throw new CatalartException(`Unable to find entity with id ${id}`)
     });
   }
 

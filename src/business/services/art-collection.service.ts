@@ -21,7 +21,7 @@ export class ArtCollectionService {
   ) {}
 
   async getArtCollectionById(id: number): Promise<GetArtCollectionDto> {
-    const artCollection = await this.artCollectionRepository.findOneOrFail(id, { relations: ['artwork'] });
+    const artCollection = await this.artCollectionRepository.findByIdOrFail(id, { relations: ['artwork'] });
     return this.artCollectionMappingService.mapToGetArtCollection(artCollection);
   }
 
@@ -39,13 +39,13 @@ export class ArtCollectionService {
   }
 
   async saveArtCollection(updatedArtCollection: UpdateArtCollectionDto): Promise<ArtCollection> {
-    const existingArtCollection = await this.artCollectionRepository.findOneOrFail(updatedArtCollection.id, { relations: ['artwork'] });
+    const existingArtCollection = await this.artCollectionRepository.findByIdOrFail(updatedArtCollection.id, { relations: ['artwork'] });
     const artCollection = await this.artCollectionMappingService.mapFromUpdatedArtCollection(updatedArtCollection, existingArtCollection);
     return this.artCollectionRepository.save(artCollection);
   }
 
   async deleteArtCollection(artCollectionId: number) {
-    const originalArtCollection = await this.artCollectionRepository.findOneOrFail(artCollectionId);
+    const originalArtCollection = await this.artCollectionRepository.findByIdOrFail(artCollectionId);
     return this.artCollectionRepository.remove(originalArtCollection);
   }
 }
