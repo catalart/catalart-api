@@ -7,7 +7,6 @@ import { ArtInstitutionRepository } from '@dal/repositories/art-institution.repo
 import { ArtInstitution } from '@dal/entity/reference/art-institution.entity';
 import { ReferenceService } from './reference.service';
 import { ReferenceEntity } from '@dal/entity/reference/reference-entity.interface';
-import { UpdateResult, DeleteResult } from 'typeorm';
 import { ListResponse } from '@business/models/list-response.model';
 
 @Injectable()
@@ -34,11 +33,11 @@ export class ArtInstitutionReferenceService implements ReferenceService<ArtInsti
     return this.artInstitutionRepository.findByIdOrFail(itemId);
   }
 
-  async addItem(item: ArtInstitution): Promise<ArtInstitution> {
+  async addItem(item: ReferenceEntity): Promise<ArtInstitution> {
     return this.artInstitutionRepository.save(item);
   }
 
-  async updateItem(itemId: number, item: ArtInstitution): Promise<ArtInstitution> {
+  async updateItem(itemId: number, item: ReferenceEntity): Promise<ArtInstitution> {
     const dbItem = await this.getItem(itemId);
     const updatedItem = {
       ...dbItem,

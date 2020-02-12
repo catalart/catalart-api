@@ -7,7 +7,6 @@ import { ReferenceService } from './reference.service';
 import { ArtworkStyle } from '@dal/entity/reference/artwork-style.entity';
 import { ArtworkStyleRepository } from '@dal/repositories/artwork-style.repository';
 import { ReferenceEntity } from '@dal/entity/reference/reference-entity.interface';
-import { UpdateResult, DeleteResult } from 'typeorm';
 import { ListResponse } from '@business/models/list-response.model';
 
 @Injectable()
@@ -34,11 +33,11 @@ export class ArtworkStyleReferenceService implements ReferenceService<ArtworkSty
     return this.artworkStyleRepository.findByIdOrFail(itemId);
   }
 
-  async addItem(item: ArtworkStyle): Promise<ArtworkStyle> {
+  async addItem(item: ReferenceEntity): Promise<ArtworkStyle> {
     return this.artworkStyleRepository.save(item);
   }
 
-  async updateItem(itemId: number, item: ArtworkStyle): Promise<ArtworkStyle> {
+  async updateItem(itemId: number, item: ReferenceEntity): Promise<ArtworkStyle> {
     const dbItem = await this.getItem(itemId);
     const updatedItem = {
       ...dbItem,
