@@ -34,11 +34,11 @@ export class ArtworkStyleReferenceService implements ReferenceService<ArtworkSty
     return this.artworkStyleRepository.findByIdOrFail(itemId);
   }
 
-  async addItem(item: ArtworkStyle): Promise<ArtworkStyle> {
+  async addItem(item: ReferenceEntity): Promise<ArtworkStyle> {
     return this.artworkStyleRepository.save(item);
   }
 
-  async updateItem(itemId: number, item: ArtworkStyle): Promise<ArtworkStyle> {
+  async updateItem(itemId: number, item: ReferenceEntity): Promise<ArtworkStyle> {
     const dbItem = await this.getItem(itemId);
     const updatedItem = {
       ...dbItem,

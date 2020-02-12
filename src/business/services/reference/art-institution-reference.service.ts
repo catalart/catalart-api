@@ -34,11 +34,11 @@ export class ArtInstitutionReferenceService implements ReferenceService<ArtInsti
     return this.artInstitutionRepository.findByIdOrFail(itemId);
   }
 
-  async addItem(item: ArtInstitution): Promise<ArtInstitution> {
+  async addItem(item: ReferenceEntity): Promise<ArtInstitution> {
     return this.artInstitutionRepository.save(item);
   }
 
-  async updateItem(itemId: number, item: ArtInstitution): Promise<ArtInstitution> {
+  async updateItem(itemId: number, item: ReferenceEntity): Promise<ArtInstitution> {
     const dbItem = await this.getItem(itemId);
     const updatedItem = {
       ...dbItem,
