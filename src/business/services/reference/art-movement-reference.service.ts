@@ -6,7 +6,6 @@ import { ReferenceMappingService } from '../maps/reference-mapping.service';
 import { ArtMovementRepository } from '@dal/repositories/art-movement.repository';
 import { ArtMovement } from '@dal/entity/reference/art-movement.entity';
 import { ReferenceService } from './reference.service';
-import { UpdateResult, DeleteResult } from 'typeorm';
 import { ReferenceEntity } from '@dal/entity/reference/reference-entity.interface';
 import { ListResponse } from '@business/models/list-response.model';
 

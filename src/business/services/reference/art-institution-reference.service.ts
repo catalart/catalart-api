@@ -7,7 +7,6 @@ import { ArtInstitutionRepository } from '@dal/repositories/art-institution.repo
 import { ArtInstitution } from '@dal/entity/reference/art-institution.entity';
 import { ReferenceService } from './reference.service';
 import { ReferenceEntity } from '@dal/entity/reference/reference-entity.interface';
-import { UpdateResult, DeleteResult } from 'typeorm';
 import { ListResponse } from '@business/models/list-response.model';
 
 @Injectable()

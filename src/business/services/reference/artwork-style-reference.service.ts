@@ -7,7 +7,6 @@ import { ReferenceService } from './reference.service';
 import { ArtworkStyle } from '@dal/entity/reference/artwork-style.entity';
 import { ArtworkStyleRepository } from '@dal/repositories/artwork-style.repository';
 import { ReferenceEntity } from '@dal/entity/reference/reference-entity.interface';
-import { UpdateResult, DeleteResult } from 'typeorm';
 import { ListResponse } from '@business/models/list-response.model';
 
 @Injectable()
